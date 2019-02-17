@@ -4,6 +4,8 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <climits>
 
 using namespace std;
 /*
@@ -27,6 +29,7 @@ struct List {
     struct List *next = nullptr;
 };
 
+
 typedef List *list;
 
 DataType input_atom();
@@ -45,17 +48,25 @@ void show(list);
 
 void sum(list begin);
 
+list readFile(string fileName, list begin);
+
 list del(list);
 
-int main() {
+int main(int argc, char *argv[]) {
     string file;
     char menu = '0';
     list atoms = nullptr;
 
-    // TODO add function for file opening and reading
+    string inFileName;
 
-    //atoms = readFile(&file, atoms);
-    atoms = NULL;
+    if (argc == 2)
+        inFileName = argv[1];
+    else {
+        cout << "Введите название файла: " << endl;
+        cin >> inFileName;
+    }
+    inFileName = "../lab1-1.txt";
+    atoms = readFile(inFileName, atoms);
 
     while (menu != '6') {
         system("clear");
@@ -87,9 +98,7 @@ int main() {
                 break;
         }
     }
-
-    // TODO add function for file opening and writing
-
+    writeFile(&inFileName, atoms);
     deleteList(atoms);
     return 0;
 }
@@ -107,20 +116,61 @@ DataType input_atom() {
     return atom;
 }
 
-list add(list begin, DataType atom) {
-    throw;
+list readFile(string fileName, list begin) {
+    FILE *file;
+    DataType atom;
+    const char *fileNameC = fileName.c_str();
+    if ((file = fopen(fileNameC, "rb")) == NULL) {
+        perror("Error open file");
+        return begin;
+    }
+    while (fread(&atom, sizeof(atom), 1, file))
+        begin = add(begin, atom);
+    fclose(file);
+    return begin;
 }
 
-list readFile(string *filename, list begin) {
-    throw;
+list add(list begin, DataType atom) {
+    list temp;
+    if (begin == nullptr) {
+        begin = new struct List;
+        temp = begin;
+    } else {
+        temp = begin;
+        while (temp->next) temp = temp->next;
+        temp->next = new struct List;
+        temp = temp->next;
+    }
+    temp->data = atom;
+    temp->next = nullptr;
+    std::cin.ignore(INT_MAX);
+    cin.clear();
+    return begin;
 }
 
 void deleteList(list begin) {
-    throw;
+    list temp = begin;
+    while (temp) {
+        begin = temp->next;
+        free(temp);
+        temp = begin;
+    }
 }
 
 void writeFile(string *filename, list begin) {
-    throw;
+    FILE *f;
+    const char *fileNameC = filename->c_str();
+    if ((f = fopen(fileNameC, "wb")) == nullptr) {
+        perror("Error create file");
+        system("pause");
+        return;
+    }
+    while (begin) {
+        fwrite(&begin->data, sizeof(DataType), 1, f);
+        begin = begin->next;
+    }
+    std::cin.ignore(INT_MAX);
+    cin.clear();
 }
 
 void edit(list begin) {
@@ -128,7 +178,21 @@ void edit(list begin) {
 }
 
 void show(list begin) {
-    throw;
+    int k = 0;
+    if (begin == NULL) {
+        puts("List is empty");
+        return;
+    }
+    puts("| # |          Name                   | Abbreviation |  Mass  | Charge |");
+    puts("-------------------------------------------------------------------------");
+    while (begin) {
+        printf("|%3d | %-29s |%11s |%8lf |%10.2d |\n", ++k, begin->data.name.c_str(),
+               begin->data.abr, begin->data.mass, begin->data.charge);
+        begin = begin->next;
+    }
+    puts("-------------------------------------------------------------------------");
+    std::cin.ignore(INT_MAX);
+    cin.clear();
 }
 
 void sum(list begin) {
