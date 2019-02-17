@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by vhundef on 13.02.19.
 //
@@ -5,7 +7,6 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <climits>
 
 using namespace std;
 /*
@@ -17,11 +18,10 @@ using namespace std;
 
 struct atom {
     string name;
-    char abr[2];
+    string abr;
     double mass;
-    bool charge; // false means negative, true means positive
+    int charge; // false means negative, true means positive
 };
-
 typedef struct atom DataType;
 
 struct List {
@@ -34,11 +34,18 @@ typedef List *list;
 
 DataType input_atom();
 
+void clearBuff() {
+    cin.clear();    // Restore input stream to working state
+    cin.ignore(100, '\n');    // Get rid of any garbage that user might have entered}
+}
+
 list readFile(string *filename, list begin);
+
+list readFileN(string filename, list begin);
 
 list add(list begin, DataType atom);
 
-void writeFile(string *filename, list begin);
+void writeFile(string filename, list begin);
 
 void deleteList(list begin);
 
@@ -66,7 +73,7 @@ int main(int argc, char *argv[]) {
         cin >> inFileName;
     }
     inFileName = "../lab1-1.txt";
-    atoms = readFile(inFileName, atoms);
+    atoms = readFileN(inFileName, atoms);
 
     while (menu != '6') {
         system("clear");
@@ -74,10 +81,11 @@ int main(int argc, char *argv[]) {
         cout << "1. ADD" << endl;
         cout << "2. Edit record" << endl;
         cout << "3. Show" << endl;
-        cout << "4. Sum(?)" << endl;
+        cout << "4. Find Max" << endl;
         cout << "5. Delete record" << endl;
         cout << "6. Quit" << endl;
         cin >> menu;
+        clearBuff();
         switch (menu) {
             case '1':
                 atoms = add(atoms, input_atom());
@@ -98,7 +106,7 @@ int main(int argc, char *argv[]) {
                 break;
         }
     }
-    writeFile(&inFileName, atoms);
+    writeFile(inFileName, atoms);
     deleteList(atoms);
     return 0;
 }
@@ -107,12 +115,16 @@ DataType input_atom() {
     DataType atom;
     cout << "Name: ";
     cin >> atom.name;
+    clearBuff();
     cout << "Abbreviation: ";
     cin >> atom.abr;
+    clearBuff();
     cout << "Mass: ";
     cin >> atom.mass;
+    clearBuff();
     cout << "Charge: ";
     cin >> atom.charge;
+    //clearBuff();
     return atom;
 }
 
@@ -120,13 +132,56 @@ list readFile(string fileName, list begin) {
     FILE *file;
     DataType atom;
     const char *fileNameC = fileName.c_str();
-    if ((file = fopen(fileNameC, "rb")) == NULL) {
+    if ((file = fopen(fileNameC, "rb")) == nullptr) {
         perror("Error open file");
         return begin;
     }
     while (fread(&atom, sizeof(atom), 1, file))
         begin = add(begin, atom);
     fclose(file);
+    return begin;
+}
+
+list readFileN(string fileName, list begin) {
+    ifstream f(fileName);
+    if (!f)
+        return begin;
+    DataType atom;
+    string str;
+    char c = '\n';
+    int counter = 0;
+    while (getline(f, str, c)) {
+        cout << "Str :" << str << " ITR " << counter << endl;
+        switch (counter) {
+            case 0:
+                atom.name = str;
+                counter++;
+                break;
+            case 1:
+                atom.abr = str;
+                counter++;
+                break;
+            case 2:
+                atom.mass = 1;
+                counter++;
+                break;
+            case 3:
+                atom.charge = 1;
+                counter++;
+                break;
+            case 4:
+                counter = 0;
+                begin = add(begin, atom);
+                break;
+            default:
+                atom.name = "";
+                atom.abr = "";
+                atom.mass = 0;
+                atom.charge = 0;
+        }
+    }
+    clearBuff();
+    f.close();
     return begin;
 }
 
@@ -141,10 +196,8 @@ list add(list begin, DataType atom) {
         temp->next = new struct List;
         temp = temp->next;
     }
-    temp->data = atom;
+    temp->data = std::move(atom);
     temp->next = nullptr;
-    std::cin.ignore(INT_MAX);
-    cin.clear();
     return begin;
 }
 
@@ -157,42 +210,70 @@ void deleteList(list begin) {
     }
 }
 
-void writeFile(string *filename, list begin) {
-    FILE *f;
-    const char *fileNameC = filename->c_str();
-    if ((f = fopen(fileNameC, "wb")) == nullptr) {
-        perror("Error create file");
-        system("pause");
+
+void writeFile(string filename, list begin) {
+    ofstream f(filename);
+    if (!f) {
         return;
     }
     while (begin) {
-        fwrite(&begin->data, sizeof(DataType), 1, f);
+        f << begin->data.name << endl << begin->data.abr << endl;
+        f << begin->data.mass << endl << begin->data.charge << endl << "====" << endl;
         begin = begin->next;
     }
-    std::cin.ignore(INT_MAX);
-    cin.clear();
+    f.close();
+}
+
+void printLine(list pos) {
+    printf("Name : %s\nAbbreviation : %s\nMass : %lf\nCharge : %.2d\n", pos->data.name.c_str(),
+           pos->data.abr.c_str(), pos->data.mass, pos->data.charge);
 }
 
 void edit(list begin) {
-    throw;
+    int n, k = 1;
+    char yes;
+    system("clear");
+    if (begin == nullptr) {
+        cout << "List is empty";
+        return;
+    }
+    cout << "Number record for redact?";
+    cin >> n;
+    if (n < 1) {
+        cout << "Error";
+        return;
+    }
+    while (begin && k < n) {
+        begin = begin->next;
+        k++;
+    }
+    if (begin == nullptr) {
+        cout << "Error";
+        return;
+    }
+    printLine(begin);
+    puts("Redact? (y/n)");
+    do
+        cin >> yes;
+    while (yes != 'y' && yes != 'Y' && yes != 'n' && yes != 'N');
+    if (yes == 'y' || yes == 'Y')
+        begin->data = input_atom();
 }
 
 void show(list begin) {
     int k = 0;
-    if (begin == NULL) {
+    if (begin == nullptr) {
         puts("List is empty");
         return;
     }
     puts("| # |          Name                   | Abbreviation |  Mass  | Charge |");
     puts("-------------------------------------------------------------------------");
     while (begin) {
-        printf("|%3d | %-29s |%11s |%8lf |%10.2d |\n", ++k, begin->data.name.c_str(),
-               begin->data.abr, begin->data.mass, begin->data.charge);
+        printf("|%2d | %-30s  |%-13s |%8lf |%-5d |\n", ++k, begin->data.name.c_str(),
+               begin->data.abr.c_str(), begin->data.mass, begin->data.charge);
         begin = begin->next;
     }
     puts("-------------------------------------------------------------------------");
-    std::cin.ignore(INT_MAX);
-    cin.clear();
 }
 
 void sum(list begin) {
@@ -200,5 +281,56 @@ void sum(list begin) {
 }
 
 list del(list begin) {
-    throw;
+    int n, k = 1;
+    char yes;
+    list temp, temp1;
+    system("clear");
+    system("cls");
+    if (begin == nullptr) {
+        cout << "List is empty";
+        return nullptr;
+    }
+    cout << "Number record for delete?";
+    cin >> n;
+    if (n < 1) {
+        cout << "ERR";
+        return begin;
+    }
+    if (n == 1) {
+        printLine(begin);
+        puts("Delete? (y/n)");
+        do
+            yes = static_cast<char>(getchar());
+        while (yes != 'y' && yes != 'Y' && yes != 'n' && yes != 'N');
+        if (yes == 'y' || yes == 'Y') {
+            temp = begin->next;
+            free(begin);
+            return temp;
+        } else return begin;
+    }
+    if (begin->next == nullptr && n > 1) {
+        cout << "ERR";
+        return begin;
+    }
+    temp = begin;
+    temp1 = temp->next;
+    while (temp1->next && k < n - 1) {
+        temp = temp1;
+        temp1 = temp->next;
+        k++;
+    }
+    if (k < n - 1) {
+        cout << "ERR";
+        return begin;
+    }
+    printLine(temp1);
+    cout << "Delete? (y/n)";
+    do
+        yes = static_cast<char>(getchar());
+    while (yes != 'y' && yes != 'Y' && yes != 'n' && yes != 'N');
+    if (yes == 'y' || yes == 'Y') {
+        temp->next = temp1->next;
+        free(temp1);
+    }
+    return begin;
 }
