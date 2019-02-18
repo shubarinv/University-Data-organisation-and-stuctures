@@ -51,11 +51,13 @@ void deleteList(list begin);
 
 void edit(list);
 
-void show(list);
+void show(list, bool);
 
 void sum(list begin);
 
 list readFile(string fileName, list begin);
+
+list findMax(list);
 
 list del(list);
 
@@ -73,7 +75,7 @@ int main(int argc, char *argv[]) {
         cin >> inFileName;
     }
     inFileName = "../lab1-1.txt";
-    atoms = readFileN(inFileName, atoms);
+    atoms = readFile(inFileName, atoms);
 
     while (menu != '6') {
         system("clear");
@@ -94,10 +96,10 @@ int main(int argc, char *argv[]) {
                 edit(atoms);
                 break;
             case '3':
-                show(atoms);
+                show(atoms, true);
                 break;
             case '4':
-                sum(atoms);
+                show(findMax(atoms), false);
                 break;
             case '5':
                 atoms = del(atoms);
@@ -129,20 +131,6 @@ DataType input_atom() {
 }
 
 list readFile(string fileName, list begin) {
-    FILE *file;
-    DataType atom;
-    const char *fileNameC = fileName.c_str();
-    if ((file = fopen(fileNameC, "rb")) == nullptr) {
-        perror("Error open file");
-        return begin;
-    }
-    while (fread(&atom, sizeof(atom), 1, file))
-        begin = add(begin, atom);
-    fclose(file);
-    return begin;
-}
-
-list readFileN(string fileName, list begin) {
     ifstream f(fileName);
     if (!f)
         return begin;
@@ -162,11 +150,11 @@ list readFileN(string fileName, list begin) {
                 counter++;
                 break;
             case 2:
-                atom.mass = 1;
+                atom.mass = atoi(str.c_str());
                 counter++;
                 break;
             case 3:
-                atom.charge = 1;
+                atom.charge = atoi(str.c_str());
                 counter++;
                 break;
             case 4:
@@ -260,7 +248,7 @@ void edit(list begin) {
         begin->data = input_atom();
 }
 
-void show(list begin) {
+void show(list begin, bool all) {
     int k = 0;
     if (begin == nullptr) {
         puts("List is empty");
@@ -268,16 +256,30 @@ void show(list begin) {
     }
     puts("| # |          Name                   | Abbreviation |  Mass  | Charge |");
     puts("-------------------------------------------------------------------------");
-    while (begin) {
-        printf("|%2d | %-30s  |%-13s |%8lf |%-5d |\n", ++k, begin->data.name.c_str(),
+    if (all) {
+        while (begin) {
+            printf("|%2d | %-30s  |%-13s |%8lf |%-5d |\n", ++k, begin->data.name.c_str(),
+                   begin->data.abr.c_str(), begin->data.mass, begin->data.charge);
+            begin = begin->next;
+        }
+    } else {
+        printf("|%2s | %-30s  |%-13s |%8lf |%-5d |\n", " ", begin->data.name.c_str(),
                begin->data.abr.c_str(), begin->data.mass, begin->data.charge);
-        begin = begin->next;
     }
     puts("-------------------------------------------------------------------------");
 }
 
-void sum(list begin) {
-    throw;
+list findMax(list begin) {
+    list maxEntry = nullptr;
+    double max = -1;
+    while (begin) {
+        if (begin->data.mass > max) {
+            max = begin->data.mass;
+            maxEntry = begin;
+        }
+        begin = begin->next;
+    }
+    return maxEntry;
 }
 
 list del(list begin) {
