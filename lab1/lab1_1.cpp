@@ -1,12 +1,10 @@
 #include <utility>
-
-//
-// Created by vhundef on 13.02.19.
-//
-
 #include <string>
 #include <iostream>
 #include <fstream>
+//
+// Created by vhundef on 13.02.19.
+//
 
 using namespace std;
 /*
@@ -39,9 +37,6 @@ void clearBuff() {
     cin.ignore(100, '\n');    // Get rid of any garbage that user might have entered}
 }
 
-list readFile(string *filename, list begin);
-
-list readFileN(string filename, list begin);
 
 list add(list begin, DataType atom);
 
@@ -52,8 +47,6 @@ void deleteList(list begin);
 void edit(list);
 
 void show(list, bool);
-
-void sum(list begin);
 
 list readFile(string fileName, list begin);
 
