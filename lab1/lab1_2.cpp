@@ -12,14 +12,14 @@ class Queue {
         element *next;
     } *front, *rear; //индексы головы и хвоста
 public:
-    Queue() { front = rear = NULL; }
+    Queue() { front = rear = nullptr; }
 
     ~Queue();        //деструктор (освобождение памяти)
-    int Empty(void); //проверка на пустоту
-    int Full(void); //проверка на полноту заполнения
-    DataType Front(void); //неразрушающее чтение элемента
+    int Empty(); //проверка на пустоту
+    int Full(); //проверка на полноту заполнения
+    DataType Front(); //неразрушающее чтение элемента
     int EnQueue(DataType x); //добавление элемента в очередь
-    DataType DeQueue(void); //извлечение элемента из очереди
+    DataType DeQueue(); //извлечение элемента из очереди
 };
 
 int main(void) {
@@ -37,27 +37,27 @@ int main(void) {
     return 0;
 }
 
-int Queue::Empty(void) {
-    return front == NULL;
+int Queue::Empty() {
+    return front == nullptr;
 }
 
-int Queue::Full(void) {
+int Queue::Full() {
     element *temp = new(std::nothrow) element;
-    if (temp == NULL) return 1;
+    if (temp == nullptr) return 1;
     delete temp;
     return 0;
 }
 
-DataType Queue::Front(void) {
+DataType Queue::Front() {
     return front->data;
 }
 
 int Queue::EnQueue(DataType x) {
     element *temp = new(std::nothrow) element;
-    if (temp == NULL) return 1;
+    if (temp == nullptr) return 1;
     temp->data = x;
-    temp->next = NULL;
-    if (front == NULL)
+    temp->next = nullptr;
+    if (front == nullptr)
         front = rear = temp;
     else {
         rear->next = temp;
@@ -66,7 +66,7 @@ int Queue::EnQueue(DataType x) {
     return 1;
 }
 
-DataType Queue::DeQueue(void) {
+DataType Queue::DeQueue() {
     DataType temp = front->data;
     element *tmp = front;
     front = front->next;
