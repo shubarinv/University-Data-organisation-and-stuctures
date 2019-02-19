@@ -132,7 +132,6 @@ list readFile(string fileName, list begin) {
     char c = '\n';
     int counter = 0;
     while (getline(f, str, c)) {
-        cout << "Str :" << str << " ITR " << counter << endl;
         switch (counter) {
             case 0:
                 atom.name = str;
@@ -248,7 +247,7 @@ void show(list begin, bool all) {
         return;
     }
     puts("| # |          Name                   | Abbreviation |  Mass  | Charge |");
-    puts("-------------------------------------------------------------------------");
+    puts("------------------------------------------------------------------------");
     if (all) {
         while (begin) {
             printf("|%2d | %-30s  |%-13s |%8lf |%-5d |\n", ++k, begin->data.name.c_str(),
@@ -259,7 +258,7 @@ void show(list begin, bool all) {
         printf("|%2s | %-30s  |%-13s |%8lf |%-5d |\n", " ", begin->data.name.c_str(),
                begin->data.abr.c_str(), begin->data.mass, begin->data.charge);
     }
-    puts("-------------------------------------------------------------------------");
+    puts("------------------------------------------------------------------------");
 }
 
 list findMax(list begin) {
