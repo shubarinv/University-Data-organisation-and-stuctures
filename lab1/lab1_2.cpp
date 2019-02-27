@@ -10,6 +10,8 @@ class Queue {
     struct element {
         DataType data;
         element *next;
+        double coef;
+        int expon;
     } *front, *rear; //индексы головы и хвоста
 public:
     Queue() { front = rear = nullptr; }
@@ -22,7 +24,7 @@ public:
     DataType DeQueue(); //извлечение элемента из очереди
 };
 
-int main(void) {
+int main() {
     Queue q;
     int i;
     for (i = 1; i <= 6; i++)

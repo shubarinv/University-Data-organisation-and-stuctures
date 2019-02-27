@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+
 //
 // Created by vhundef on 13.02.19.
 //
@@ -67,7 +68,7 @@ int main(int argc, char *argv[]) {
         cout << "Введите название файла: " << endl;
         cin >> inFileName;
     }
-    inFileName = "../lab1-1.txt";
+    inFileName = "../lab1-1";
     atoms = readFile(inFileName, atoms);
 
     while (menu != '6') {
@@ -124,7 +125,7 @@ DataType input_atom() {
 }
 
 list readFile(string fileName, list begin) {
-    ifstream f(fileName);
+    ifstream f(fileName, ios::binary | ios::in);
     if (!f)
         return begin;
     DataType atom;
@@ -132,6 +133,7 @@ list readFile(string fileName, list begin) {
     char c = '\n';
     int counter = 0;
     while (getline(f, str, c)) {
+        cout << str;
         switch (counter) {
             case 0:
                 atom.name = str;
@@ -160,11 +162,11 @@ list readFile(string fileName, list begin) {
                 atom.charge = 0;
         }
     }
+
     clearBuff();
     f.close();
     return begin;
 }
-
 list add(list begin, DataType atom) {
     list temp;
     if (begin == nullptr) {
@@ -192,13 +194,22 @@ void deleteList(list begin) {
 
 
 void writeFile(string filename, list begin) {
-    ofstream f(filename);
+    ofstream f(filename, ios::binary | ios::out);
     if (!f) {
         return;
     }
+    char Nline[] = "\n";
     while (begin) {
-        f << begin->data.name << endl << begin->data.abr << endl;
-        f << begin->data.mass << endl << begin->data.charge << endl << "====" << endl;
+        f.write((char *) &begin->data.name, sizeof(string));
+        f.write(Nline, sizeof(char *));
+        f.write((char *) &begin->data.abr, sizeof(char[2]));
+        f.write(Nline, sizeof(char *));
+        f.write(reinterpret_cast<char *>((double *) &begin->data.mass), sizeof(double));
+        f.write(Nline, sizeof(char *));
+        f.write(reinterpret_cast<char *>((int *) &begin->data.charge), sizeof(int));
+        f.write(Nline, sizeof(char *));
+
+        f.write(Nline, sizeof(char *));
         begin = begin->next;
     }
     f.close();
