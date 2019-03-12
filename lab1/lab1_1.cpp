@@ -16,8 +16,8 @@ using namespace std;
  */
 
 struct atom {
-    string name;
-    string abr;
+    char name[30];
+    char abr[2];
     double mass;
     int charge; // false means negative, true means positive
 };
@@ -68,12 +68,8 @@ int main(int argc, char *argv[]) {
         cout << "Введите название файла: " << endl;
         cin >> inFileName;
     }
-    inFileName = "../lab1-1";
     atoms = readFile(inFileName, atoms);
-
     while (menu != '6') {
-        system("clear");
-        system("cls");
         cout << "1. ADD" << endl;
         cout << "2. Edit record" << endl;
         cout << "3. Show" << endl;
@@ -125,46 +121,17 @@ DataType input_atom() {
 }
 
 list readFile(string fileName, list begin) {
-    ifstream f(fileName, ios::binary | ios::in);
-    if (!f)
-        return begin;
+    cout << "\n========\nReading file -";
+    FILE *f;
     DataType atom;
-    string str;
-    char c = '\n';
-    int counter = 0;
-    while (getline(f, str, c)) {
-        cout << str;
-        switch (counter) {
-            case 0:
-                atom.name = str;
-                counter++;
-                break;
-            case 1:
-                atom.abr = str;
-                counter++;
-                break;
-            case 2:
-                atom.mass = atoi(str.c_str());
-                counter++;
-                break;
-            case 3:
-                atom.charge = atoi(str.c_str());
-                counter++;
-                break;
-            case 4:
-                counter = 0;
-                begin = add(begin, atom);
-                break;
-            default:
-                atom.name = "";
-                atom.abr = "";
-                atom.mass = 0;
-                atom.charge = 0;
-        }
+    if ((f = fopen(fileName.c_str(), "rb")) == NULL) {
+        perror("Error open file");
+        return begin;
     }
-
-    clearBuff();
-    f.close();
+    while (fread(&atom, sizeof(atom), 1, f))
+        begin = add(begin, atom);
+    fclose(f);
+    cout << "OK\n========\n" << endl;
     return begin;
 }
 list add(list begin, DataType atom) {
@@ -194,30 +161,23 @@ void deleteList(list begin) {
 
 
 void writeFile(string filename, list begin) {
-    ofstream f(filename, ios::binary | ios::out);
-    if (!f) {
+    cout << "\n========\nWriting file -";
+    FILE *f;
+    if ((f = fopen(filename.c_str(), "wb")) == NULL) {
+        perror("Error create file");
+        system("pause");
         return;
     }
-    char Nline[] = "\n";
     while (begin) {
-        f.write((char *) &begin->data.name, sizeof(string));
-        f.write(Nline, sizeof(char *));
-        f.write((char *) &begin->data.abr, sizeof(char[2]));
-        f.write(Nline, sizeof(char *));
-        f.write(reinterpret_cast<char *>((double *) &begin->data.mass), sizeof(double));
-        f.write(Nline, sizeof(char *));
-        f.write(reinterpret_cast<char *>((int *) &begin->data.charge), sizeof(int));
-        f.write(Nline, sizeof(char *));
-
-        f.write(Nline, sizeof(char *));
+        fwrite(&begin->data, sizeof(DataType), 1, f);
         begin = begin->next;
     }
-    f.close();
+    cout << "OK\n========\n" << endl;
 }
 
 void printLine(list pos) {
-    printf("Name : %s\nAbbreviation : %s\nMass : %lf\nCharge : %.2d\n", pos->data.name.c_str(),
-           pos->data.abr.c_str(), pos->data.mass, pos->data.charge);
+    printf("Name : %s\nAbbreviation : %s\nMass : %lf\nCharge : %.2d\n", pos->data.name,
+           pos->data.abr, pos->data.mass, pos->data.charge);
 }
 
 void edit(list begin) {
@@ -261,13 +221,13 @@ void show(list begin, bool all) {
     puts("------------------------------------------------------------------------");
     if (all) {
         while (begin) {
-            printf("|%2d | %-30s  |%-13s |%8lf |%-5d |\n", ++k, begin->data.name.c_str(),
-                   begin->data.abr.c_str(), begin->data.mass, begin->data.charge);
+            printf("|%2d | %-30s  |%-13s |%8lf |%-5d |\n", ++k, begin->data.name,
+                   begin->data.abr, begin->data.mass, begin->data.charge);
             begin = begin->next;
         }
     } else {
-        printf("|%2s | %-30s  |%-13s |%8lf |%-5d |\n", " ", begin->data.name.c_str(),
-               begin->data.abr.c_str(), begin->data.mass, begin->data.charge);
+        printf("|%2s | %-30s  |%-13s |%8lf |%-5d |\n", " ", begin->data.name,
+               begin->data.abr, begin->data.mass, begin->data.charge);
     }
     puts("------------------------------------------------------------------------");
 }
@@ -290,7 +250,6 @@ list del(list begin) {
     char yes;
     list temp, temp1;
     system("clear");
-    system("cls");
     if (begin == nullptr) {
         cout << "List is empty";
         return nullptr;
