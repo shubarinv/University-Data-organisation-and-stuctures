@@ -55,6 +55,8 @@ list findMax(list);
 
 list del(list);
 
+list findElmntByAbbr(list);
+
 int main(int argc, char *argv[]) {
     string file;
     char menu = '0';
@@ -69,13 +71,14 @@ int main(int argc, char *argv[]) {
         cin >> inFileName;
     }
     atoms = readFile(inFileName, atoms);
-    while (menu != '6') {
+    while (menu != '7') {
         cout << "1. ADD" << endl;
         cout << "2. Edit record" << endl;
         cout << "3. Show" << endl;
         cout << "4. Find Max" << endl;
-        cout << "5. Delete record" << endl;
-        cout << "6. Quit" << endl;
+        cout << "5. Find Element by Abbr" << endl;
+        cout << "6. Delete record" << endl;
+        cout << "7. Quit" << endl;
         cin >> menu;
         clearBuff();
         switch (menu) {
@@ -92,6 +95,9 @@ int main(int argc, char *argv[]) {
                 show(findMax(atoms), false);
                 break;
             case '5':
+                show(findElmntByAbbr(atoms), false);
+                break;
+            case '6':
                 atoms = del(atoms);
 
             default:
@@ -134,6 +140,7 @@ list readFile(string fileName, list begin) {
     cout << "OK\n========\n" << endl;
     return begin;
 }
+
 list add(list begin, DataType atom) {
     list temp;
     if (begin == nullptr) {
@@ -243,6 +250,19 @@ list findMax(list begin) {
         begin = begin->next;
     }
     return maxEntry;
+}
+
+list findElmntByAbbr(list begin) {
+    char lookFor[2];
+    cout << "Введите сокращение искомого элемента: ";
+    cin >> lookFor;
+    string tmp;
+    while (begin) {
+        tmp = begin->data.abr;
+        if (tmp == lookFor) break;
+        begin = begin->next;
+    }
+    return begin;
 }
 
 list del(list begin) {
