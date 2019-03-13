@@ -1,7 +1,8 @@
 #include <utility>
 #include <string>
 #include <iostream>
-#include <fstream>
+#include <cstring>
+#include <random>
 
 //
 // Created by vhundef on 13.02.19.
@@ -19,7 +20,7 @@ struct atom {
     char name[30];
     char abr[2];
     double mass;
-    int charge; // false means negative, true means positive
+    int charge;
 };
 typedef struct atom DataType;
 
@@ -57,6 +58,8 @@ list del(list);
 
 list findElmntByAbbr(list);
 
+list fillFileWithRandomData(int, list);
+
 int main(int argc, char *argv[]) {
     string file;
     char menu = '0';
@@ -79,26 +82,39 @@ int main(int argc, char *argv[]) {
         cout << "5. Find Element by Abbr" << endl;
         cout << "6. Delete record" << endl;
         cout << "7. Quit" << endl;
+        cout << "8. Random fill" << endl;
+
         cin >> menu;
         clearBuff();
         switch (menu) {
             case '1':
+                system("clear");
                 atoms = add(atoms, input_atom());
                 break;
             case '2':
+                system("clear");
                 edit(atoms);
                 break;
             case '3':
+                system("clear");
                 show(atoms, true);
                 break;
             case '4':
+                system("clear");
                 show(findMax(atoms), false);
                 break;
             case '5':
+                system("clear");
                 show(findElmntByAbbr(atoms), false);
                 break;
             case '6':
+                system("clear");
                 atoms = del(atoms);
+                break;
+            case '8':
+                system("clear");
+                atoms = fillFileWithRandomData(80, atoms);
+                break;
 
             default:
                 break;
@@ -131,7 +147,8 @@ list readFile(string fileName, list begin) {
     FILE *f;
     DataType atom;
     if ((f = fopen(fileName.c_str(), "rb")) == NULL) {
-        perror("Error open file");
+        cout << "ERROR" << endl << endl;
+        perror("");
         return begin;
     }
     while (fread(&atom, sizeof(atom), 1, f))
@@ -152,8 +169,9 @@ list add(list begin, DataType atom) {
         temp->next = new struct List;
         temp = temp->next;
     }
-    temp->data = std::move(atom);
+    temp->data = atom;
     temp->next = nullptr;
+    system("clear");
     return begin;
 }
 
@@ -192,7 +210,7 @@ void edit(list begin) {
     char yes;
     system("clear");
     if (begin == nullptr) {
-        cout << "List is empty";
+        cout << "List is empty\n";
         return;
     }
     cout << "Number record for redact?";
@@ -206,7 +224,7 @@ void edit(list begin) {
         k++;
     }
     if (begin == nullptr) {
-        cout << "Error";
+        cout << "Error\n";
         return;
     }
     printLine(begin);
@@ -216,12 +234,13 @@ void edit(list begin) {
     while (yes != 'y' && yes != 'Y' && yes != 'n' && yes != 'N');
     if (yes == 'y' || yes == 'Y')
         begin->data = input_atom();
+    system("clear");
 }
 
 void show(list begin, bool all) {
     int k = 0;
     if (begin == nullptr) {
-        puts("List is empty");
+        puts("List is empty\n");
         return;
     }
     puts("| # |          Name                   | Abbreviation |  Mass  | Charge |");
@@ -271,10 +290,10 @@ list del(list begin) {
     list temp, temp1;
     system("clear");
     if (begin == nullptr) {
-        cout << "List is empty";
+        cout << "List is empty\n";
         return nullptr;
     }
-    cout << "Number record for delete?";
+    cout << "Number record for delete? ";
     cin >> n;
     if (n < 1) {
         cout << "ERR";
@@ -304,11 +323,11 @@ list del(list begin) {
         k++;
     }
     if (k < n - 1) {
-        cout << "ERR";
+        cout << "ERR\n";
         return begin;
     }
     printLine(temp1);
-    cout << "Delete? (y/n)";
+    cout << "Delete? (y/n) ";
     do
         yes = static_cast<char>(getchar());
     while (yes != 'y' && yes != 'Y' && yes != 'n' && yes != 'N');
@@ -316,5 +335,34 @@ list del(list begin) {
         temp->next = temp1->next;
         free(temp1);
     }
+    return begin;
+}
+
+//ONLY FOR DEBUG
+int randomNum() {
+    random_device dev;
+    mt19937 rng(dev());
+    uniform_int_distribution<mt19937::result_type> dist6(0, 62);
+    return static_cast<int>(dist6(rng));
+}
+
+list fillFileWithRandomData(int amountOfRecords, list begin) {
+    DataType atom;
+    char *tmp = new char[30];
+    for (int i = 0; i < amountOfRecords + 1; ++i) {
+        const char charset[] = "0123456789QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+        for (int j = 0; j < 12; ++j) {
+            tmp[j] = charset[randomNum()];
+        }
+        strcpy(atom.name, tmp);
+        for (int j = 0; j < 2; ++j) {
+            tmp[j] = charset[randomNum()];
+        }
+        strcpy(atom.abr, tmp);
+        atom.mass = randomNum() + randomNum();
+        atom.charge = randomNum() + randomNum();
+        begin = add(begin, atom);
+    }
+    system("clear");
     return begin;
 }
