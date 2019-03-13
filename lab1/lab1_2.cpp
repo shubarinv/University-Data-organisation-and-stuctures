@@ -5,6 +5,7 @@
 #include <iostream>
 
 typedef int DataType;
+using namespace std;
 
 class Queue {
     struct element {
@@ -65,6 +66,11 @@ int Queue::EnQueue(DataType x) {
         rear->next = temp;
         rear = rear->next;
     }
+    cout<<"Введите коэффициент C: ";
+    cin>>temp->coef;
+    cout<<endl<<"Введите показатель степени e: ";
+    cin>>temp->expon;
+    cout<<endl;
     return 1;
 }
 
