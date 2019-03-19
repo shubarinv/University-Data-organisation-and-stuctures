@@ -11,33 +11,29 @@ using namespace std;
 class Queue {
     struct element {
         DataType data;
-        element *next;
-        double coef;
-        int expon;
+        element *next; ///< IDK what this var does
+        double coef; ///< Коэф c в (cx^en)
+        int expon; ///< Степень x
     } *front, *rear; //индексы головы и хвоста
 public:
     Queue() { front = rear = nullptr; }
 
-    ~Queue();        //деструктор (освобождение памяти)
-    int Empty(); //проверка на пустоту
-    int Full(); //проверка на полноту заполнения
-    DataType Front(); //неразрушающее чтение элемента
-    int EnQueue(DataType x); //добавление элемента в очередь
-    DataType DeQueue(); //извлечение элемента из очереди
+    ~Queue();        ///<деструктор (освобождение памяти)
+    int Empty(); ///<проверка на пустоту
+    int Full(); ///<проверка на полноту заполнения
+    DataType Front(); ///<неразрушающее чтение элемента
+    int EnQueue(DataType x); ///<добавление элемента в очередь
+    DataType DeQueue(); ///<извлечение элемента из очереди
 };
 
 int main() {
     Queue q;
-    int i;
-    for (i = 1; i <= 6; i++)
-        q.EnQueue(i);
-    std::cout << q.DeQueue() << ' ';
-    std::cout << q.DeQueue() << ' ';
-    for (i = 1; i < 6; i++)
-        q.EnQueue(i);
+    int i = 0;
+    while (q.EnQueue(i)) {
+        i++;
+    }
     while (!q.Empty())
-        std::cout << q.DeQueue() << ' ';
-    system("pause");
+        cout << q.DeQueue();
     return 0;
 }
 
@@ -72,6 +68,9 @@ int Queue::EnQueue(DataType x) {
     cout << endl << "Введите показатель степени e: ";
     cin >> temp->expon;
     cout << endl;
+    if (temp->expon < 0) {
+        return 0;
+    }
     return 1;
 }
 
