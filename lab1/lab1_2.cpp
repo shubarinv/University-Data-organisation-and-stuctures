@@ -1,6 +1,12 @@
+/* Copyright (C) Vladimir Shubarin - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Vladimir Shubarin <vhundef@gmail.com>, Feb 2019
+ */
+
 /***
  * @author Vladimir Shubarin.
- * @date 19.03.19
+ * @date 19.02.19
  * @file lab1_2.cpp
 */
 
@@ -16,19 +22,19 @@ class Queue {
     struct element {
         DataType data;
         element *next; ///< IDK what this var does
-        double coef; ///< ÐšÐ¾ÑÑ„ c Ð² (cx^en)
-        int expon; ///< Ð¡Ñ‚ÐµÐ¿ÐµÐ½ÑŒ x
+        double coef; ///< Êîýô c â (cx^en)
+        int expon; ///< Ñòåïåíü x
     }
-            *front, *rear; //Ð¸Ð½Ð´ÐµÐºÑÑ‹ Ð³Ð¾Ð»Ð¾Ð²Ñ‹ Ð¸ Ñ…Ð²Ð¾ÑÑ‚Ð°
+            *front, *rear; //èíäåêñû ãîëîâû è õâîñòà
 public:
     Queue() { front = rear = nullptr; }
-    ~Queue();        ///<Ð´ÐµÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€ (Ð¾ÑÐ²Ð¾Ð±Ð¾Ð¶Ð´ÐµÐ½Ð¸Ðµ Ð¿Ð°Ð¼ÑÑ‚Ð¸)
-    int Empty(); ///<Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð½Ð° Ð¿ÑƒÑÑ‚Ð¾Ñ‚Ñƒ
-    int Full(); ///<Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð½Ð° Ð¿Ð¾Ð»Ð½Ð¾Ñ‚Ñƒ Ð·Ð°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ
-    int Front(); ///<Ð½ÐµÑ€Ð°Ð·Ñ€ÑƒÑˆÐ°ÑŽÑ‰ÐµÐµ Ñ‡Ñ‚ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°
-    int EnQueue(int x); ///<Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð² Ð¾Ñ‡ÐµÑ€ÐµÐ´ÑŒ
-    int EnQueue(int x, int coef, int powr); ///<@brief Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð² Ð¾Ñ‡ÐµÑ€ÐµÐ´ÑŒ
-    int DeQueue(); ///<Ð¸Ð·Ð²Ð»ÐµÑ‡ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð¸Ð· Ð¾Ñ‡ÐµÑ€ÐµÐ´Ð¸
+    ~Queue();        ///<äåñòðóêòîð (îñâîáîæäåíèå ïàìÿòè)
+    int Empty(); ///<ïðîâåðêà íà ïóñòîòó
+    int Full(); ///<ïðîâåðêà íà ïîëíîòó çàïîëíåíèÿ
+    int Front(); ///<íåðàçðóøàþùåå ÷òåíèå ýëåìåíòà
+    int EnQueue(int x); ///<äîáàâëåíèå ýëåìåíòà â î÷åðåäü
+    int EnQueue(int x, int coef, int powr); ///<@brief äîáàâëåíèå ýëåìåíòà â î÷åðåäü
+    int DeQueue(); ///<èçâëå÷åíèå ýëåìåíòà èç î÷åðåäè
 };
 
 
@@ -36,9 +42,9 @@ void clearBuff() {
     cin.clear();    // Restore input stream to working state
     cin.ignore(100, '\n');    // Get rid of any garbage that user might have entered}
 }
-/// @param q Ð£ÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ Ð½Ð° Ð¾Ñ‡ÐµÑ€ÐµÐ´ÑŒ
+/// @param q Óêàçàòåëü íà î÷åðåäü
 /// @param qIndex  ?
-/// @param amountOfRecords ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ñ€Ð°Ð½Ð´Ð¾Ð¼Ð½Ð¾Ð³ÐµÐ½ÐµÑ€Ð¸Ñ€ÑƒÐµÐ¼Ñ‹Ñ… Ð·Ð°Ð¿Ð¸ÑÐµÐ¹
+/// @param amountOfRecords Êîëè÷åñòâî ðàíäîìíîãåíåðèðóåìûõ çàïèñåé
 int fillFileWithRandomData(int qIndex, Queue * q, int amountOfRecords);
 
 int main(int argc, char *argv[]) {
@@ -47,11 +53,11 @@ int main(int argc, char *argv[]) {
     Queue q;
     int i = 0;
     while (menu != '4') {
-        cout << "1. Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚" << endl;
-        cout << "2. ÐŸÐ¾ÑÑ‡Ð¸Ñ‚Ð°Ñ‚ÑŒ diff(NOT YET IMPLEMENTED)" << endl;
+        cout << "1. Äîáàâèòü ýëåìåíò" << endl;
+        cout << "2. Ïîñ÷èòàòü diff(NOT YET IMPLEMENTED)" << endl;
         cout << "3. Show" << endl;
         cout << "4. Quit" << endl;
-        cout << "5. Ð—Ð°Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ Ñ€Ð°Ð½Ð´Ð¾Ð¼Ð½Ð¾" << endl;
+        cout << "5. Çàïîëíèòü ðàíäîìíî" << endl;
         cin >> menu;
         clearBuff();
         switch (menu) {
@@ -72,7 +78,7 @@ int main(int argc, char *argv[]) {
                 break;
             case '5':
                 int tmp;
-                cout<<"ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð¾ Ñ€Ð°Ð½Ð´Ð¾Ð¼Ð½Ñ‹Ñ… ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð²: ";
+                cout<<"Êîëè÷åñòî ðàíäîìíûõ ýëåìåíòîâ: ";
                 cin>>tmp;
                 fillFileWithRandomData(i,&q,tmp);
                 break;
@@ -110,9 +116,9 @@ int Queue::EnQueue(DataType x) {
         rear->next = temp;
         rear = rear->next;
     }
-    cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐºÐ¾ÑÑ„Ñ„Ð¸Ñ†Ð¸ÐµÐ½Ñ‚ C: ";
+    cout << "Ââåäèòå êîýôôèöèåíò C: ";
     cin >> temp->coef;
-    cout << endl << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¿Ð¾ÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ ÑÑ‚ÐµÐ¿ÐµÐ½Ð¸ e: ";
+    cout << endl << "Ââåäèòå ïîêàçàòåëü ñòåïåíè e: ";
     cin >> temp->expon;
     cout << endl;
     if (temp->expon < 0) {
@@ -135,8 +141,8 @@ Queue::~Queue() {
 DataType Queue::DeQueue() {
     DataType temp = front->data;
     element *tmp = front;
-    tmp->coef;///< ÐŸÑ€Ð¸Ð¼ÐµÑ€ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ ÐºÐ¾ÑÑ„.-Ñ‚Ð°
-    tmp->expon;///< ÐŸÑ€Ð¸Ð¼ÐµÑ€ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ Ð¿Ð¾ÐºÐ°Ð·Ð°Ñ‚ÐµÐ»Ñ ÑÑ‚ÐµÐ¿ÐµÐ½Ð¸
+    tmp->coef;///< Ïðèìåð ïîëó÷åíèÿ êîýô.-òà
+    tmp->expon;///< Ïðèìåð ïîëó÷åíèÿ ïîêàçàòåëÿ ñòåïåíè
     cout << tmp->coef << "*x^" << tmp->expon;
     front = front->next;
     delete tmp;
@@ -163,7 +169,7 @@ int Queue::EnQueue(DataType x, int coef, int powr) { ///< @warning Only for debu
     return 1;
 }
 
-int randomNum() { ///< @brief Ð“ÐµÐ½ÐµÑ€Ð¸Ñ€ÑƒÐµÑ‚ ÑÐ»ÑƒÑ‡Ð°Ð¹Ð½Ñ‹Ðµ Ñ‡Ð¸ÑÐ»Ð° Ð¾Ñ‚ 0 Ð´Ð¾ 100 @bug Ð½Ð° windows Ð½Ðµ Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚
+int randomNum() { ///< @brief Ãåíåðèðóåò ñëó÷àéíûå ÷èñëà îò 0 äî 100 @bug íà windows íå ðàáîòàåò
     random_device dev;
     mt19937 rng(dev());
     uniform_int_distribution<mt19937::result_type> dist6(1, 100);
