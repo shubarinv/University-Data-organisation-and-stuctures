@@ -21,7 +21,7 @@ typedef int DataType;
 class Queue {
     struct element {
         DataType data;
-        element *next; ///< IDK what this var does
+        element *next;
         double coef; ///< Коэф c в (cx^en)
         int expon; ///< Степень x
     }
@@ -62,14 +62,11 @@ int main(int argc, char *argv[]) {
         clearBuff();
         switch (menu) {
             case '1':
-                // system("clear");
                 q.EnQueue(i);
                 i++;
                 break;
             case '2':
-                // system("clear");
                 throw;
-                break;
             case '3':
                 while (!q.Empty()) {
                     q.DeQueue();
