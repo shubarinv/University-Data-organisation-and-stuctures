@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
                 break;
             case '4':
                 system("clear");
-                show(findMax(atoms), false); 
+                show(findMax(atoms), false);
                 break;
             case '5':
                 system("clear");
