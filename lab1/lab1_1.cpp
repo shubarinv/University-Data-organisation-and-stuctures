@@ -1,12 +1,13 @@
+/* Copyright (C) Vladimir Shubarin - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Vladimir Shubarin <vhundef@gmail.com>, Feb 2019
+ */
 #include <utility>
 #include <string>
 #include <iostream>
 #include <cstring>
 #include <random>
-
-//
-// Created by vhundef on 13.02.19.
-//
 
 using namespace std;
 /*
@@ -15,12 +16,11 @@ using namespace std;
  * Вывести сведения о химическом элементе по его символическому названию.
  * Найти элемент с самой большой массой.
  */
-
 struct atom {
-    char name[30];
-    char abr[2]; //Символическое обозначение
-    double mass;
-    int charge;
+    char name[30]; ///< Название
+    char abr[2]; ///< Сокращение
+    double mass; ///< Масса
+    int charge; ///< Заряд
 };
 typedef struct atom DataType;
 
@@ -34,34 +34,37 @@ typedef List *list;
 
 DataType input_atom();
 
-void clearBuff() {
+void clearBuff() { ///< @brief Чистит буфер
     cin.clear();    // Restore input stream to working state
     cin.ignore(100, '\n');    // Get rid of any garbage that user might have entered}
 }
 
-
 list add(list begin, DataType atom);
 
+/// @param filename Название файла для записи
 void writeFile(string filename, list begin);
 
 void deleteList(list begin);
 
 void edit(list);
 
+///@param bool Выводить одну запись или несколько
 void show(list, bool);
 
+/// @param filename Название файла для записи
 list readFile(string fileName, list begin);
 
+/// @brief Находит элемент с максимальной массой
 list findMax(list);
 
 list del(list);
-
+/// @brief Находит элемент по сокращённому названию
 list findElmntByAbbr(list);
 
+/// @brief Заполняет массив случайными элементами
 list fillFileWithRandomData(int, list);
 
 int main(int argc, char *argv[]) {
-    string file;
     char menu = '0';
     list atoms = nullptr;
 
@@ -73,7 +76,7 @@ int main(int argc, char *argv[]) {
         cout << "Введите название файла: " << endl;
         cin >> inFileName;
     }
-    atoms = readFile(inFileName, atoms); // Пытаемся прочитать файл с указанным именем
+    atoms = readFile(inFileName, atoms); ///< Читает указанный пользователем файл
     while (menu != '7') {
         cout << "1. ADD" << endl;
         cout << "2. Edit record" << endl;
@@ -89,15 +92,15 @@ int main(int argc, char *argv[]) {
         switch (menu) {
             case '1':
                 system("clear");
-                atoms = add(atoms, input_atom());
+                atoms = add(atoms, input_atom()); ///< позволяет пользователю ввести элемент
                 break;
             case '2':
                 system("clear");
-                edit(atoms);
+                edit(atoms);  ///< Радактирование элемента
                 break;
             case '3':
                 system("clear");
-                show(atoms, true);
+                show(atoms, true);  ///< Вывод всех элементов
                 break;
             case '4':
                 system("clear");
