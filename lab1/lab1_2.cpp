@@ -18,23 +18,36 @@ using namespace std;
 
 typedef int DataType;
 
+class Element {
+public:
+    DataType data;
+    Element *next;
+    double coef; ///< Коэф c в (cx^en)
+    int expon; ///< Степень x
+};
+
 class Queue {
-    struct element {
-        DataType data;
-        element *next;
-        double coef; ///< Коэф c в (cx^en)
-        int expon; ///< Степень x
-    }
-            *front, *rear; //индексы головы и хвоста
+public:
+    Element *front;
+    Element *rear; //индексы головы и хвоста
 public:
     Queue() { front = rear = nullptr; }
-    ~Queue();        ///<деструктор (освобождение памяти)
+
+    ~Queue() { ///<деструктор (освобождение памяти)
+        Element *elmnt;
+        while (front) {
+            elmnt = front;
+            front = front->next;
+            delete elmnt;
+        }
+    }
+
     int Empty(); ///<проверка на пустоту
-    int Full(); ///<проверка на полноту заполнения
-    int Front(); ///<неразрушающее чтение элемента
     int EnQueue(int x); ///<добавление элемента в очередь
     int EnQueue(int x, int coef, int powr); ///<@brief добавление элемента в очередь
-    int DeQueue(); ///<извлечение элемента из очереди
+    void showAllElements();
+
+    void findDiff();
 };
 
 
@@ -42,10 +55,12 @@ void clearBuff() {
     cin.clear();    // Restore input stream to working state
     cin.ignore(100, '\n');    // Get rid of any garbage that user might have entered}
 }
+
 /// @param q Указатель на очередь
 /// @param qIndex  ?
 /// @param amountOfRecords Количество рандомногенерируемых записей
-int fillFileWithRandomData(int qIndex, Queue * q, int amountOfRecords);
+int fillFileWithRandomData(int qIndex, Queue *q, int amountOfRecords);
+
 
 int main(int argc, char *argv[]) {
     setlocale(LC_CTYPE, "rus");
@@ -67,17 +82,15 @@ int main(int argc, char *argv[]) {
                 break;
             case '2':
                 throw;
+                break;
             case '3':
-                while (!q.Empty()) {
-                    q.DeQueue();
-                }
-                cout << endl;
+                q.showAllElements();
                 break;
             case '5':
                 int tmp;
-                cout << "Количество рандомных элементов: ";
-                cin>>tmp;
-                fillFileWithRandomData(i,&q,tmp);
+                cout << "Количесто рандомных элементов: ";
+                cin >> tmp;
+                fillFileWithRandomData(i, &q, tmp);
                 break;
             default:
                 break;
@@ -86,24 +99,38 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
+void Queue::showAllElements() {
+    Element *Vsp;
+    cout << endl << "\t\tShow QUEUE:" << endl;
+    if (!Empty()) {
+        while (front) {
+            cout << front->coef << "*x^" << front->expon << "+";
+            Vsp = front;
+            front = front->next;
+
+        }
+        cout<<endl;
+        front = rear = NULL;
+    }
+}
+
+void Queue::findDiff() {
+    if (!Queue::Empty()) {
+        while (front) {
+            cout << front->coef << "*x^" << front->expon << "+";
+            front = front->next;
+        }
+        cout << endl;
+        front = rear = NULL;
+    }
+}
 
 int Queue::Empty() {
     return front == nullptr;
 }
 
-int Queue::Full() {
-    element *temp = new(std::nothrow) element;
-    if (temp == nullptr) return 1;
-    delete temp;
-    return 0;
-}
-
-DataType Queue::Front() {
-    return front->data;
-}
-
 int Queue::EnQueue(DataType x) {
-    element *temp = new(std::nothrow) element;
+    Element *temp = new(std::nothrow) Element;
     if (temp == nullptr) return 1;
     temp->data = x;
     temp->next = nullptr;
@@ -125,30 +152,8 @@ int Queue::EnQueue(DataType x) {
 }
 
 
-Queue::~Queue() {
-    element *temp = front;
-    while (front) {
-        temp = front;
-        front = front->next;
-        delete temp;
-    }
-}
-
-/// @brief Somewhy returns element index... not that it is useful in this case
-DataType Queue::DeQueue() {
-    DataType temp = front->data;
-    element *tmp = front;
-    tmp->coef;///< Пример получения коэф.-та
-    tmp->expon;///< Пример получения показателя степени
-    cout << tmp->coef << "*x^" << tmp->expon;
-    front = front->next;
-    delete tmp;
-    if (front != nullptr) cout << "+";
-    return temp;
-}
-
 int Queue::EnQueue(DataType x, int coef, int powr) { ///< @warning Only for debug purposes
-    element *temp = new(std::nothrow) element;
+    Element *temp = new(std::nothrow) Element;
     if (temp == nullptr) return 1;
     temp->data = x;
     temp->next = nullptr;
@@ -173,7 +178,7 @@ int randomNum() { ///< @brief Генерирует случайные числа
     return static_cast<int>(dist6(rng));
 }
 
-int fillFileWithRandomData(int qIndex, Queue * q, int amountOfRecords) {
+int fillFileWithRandomData(int qIndex, Queue *q, int amountOfRecords) {
     int i;
     for (i = qIndex; i < amountOfRecords; i++) {
         q->EnQueue(qIndex, randomNum(), randomNum());

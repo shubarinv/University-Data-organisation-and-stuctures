@@ -20,7 +20,7 @@ struct atom {
     char name[31]; ///< Название
     char abr[3]; ///< Сокращение
     double mass; ///< Масса
-    int charge; ///< Заряд
+    int charge{0}; ///< Заряд
 };
 typedef struct atom DataType;
 
@@ -37,7 +37,7 @@ DataType input_atom();
 
 void clearBuff() { ///< @brief Чистит буфер
     cin.clear();    // Restore input stream to working state
-    cin.ignore(100, '\n');    // Get rid of any garbage that user might have entered}
+    cin.ignore(1000, '\n');    // Get rid of any garbage that user might have entered}
 }
 
 list add(list begin, DataType atom);
@@ -59,6 +59,7 @@ list readFile(string fileName, list begin);
 list findMax(list);
 
 list del(list);
+
 /// @brief Находит элемент по сокращённому названию
 list findElmntByAbbr(list);
 
@@ -131,31 +132,48 @@ int main(int argc, char *argv[]) {
 
 DataType input_atom() {
     DataType atom;
+
+    string tmp;
     cout << "Name: ";
-    cin >> atom.name;
+    cin >> tmp;
+    for (int i = 0; i < 30; ++i) {
+        atom.name[i] = tmp[i];
+    }
     atom.name[30] = '\000';
     clearBuff();
+
+    tmp.clear();
     cout << "Abbreviation: ";
-    cin >> atom.abr;
+    cin >> tmp;
+    for (int i = 0; i < 2; ++i) {
+        atom.abr[i] = tmp[i];
+    }
     atom.abr[2] = '\000';
     clearBuff();
+
+    double mass;
     cout << "Mass: ";
-    cin >> atom.mass;
-    if (atom.mass <= 0) {
-        system("clear");
-        cout << "Не по госту" << endl;
-        return input_atom();
+    cin >> mass;
+    while (mass <= 0) {
+        clearBuff();
+        cout << "I call bullshit on that!!!!!" << endl;
+        cin >> mass;
     }
+    atom.mass = mass;
     clearBuff();
+
+
+    int charge;
     cout << "Charge: ";
-    cin >> atom.charge;
-    //clearBuff();
-    if (atom.charge <= 0) {
-        system("clear");
-        cout << "Не по госту" << endl;
-        return input_atom();
+    cin >> charge;
+    while (charge <= 0) {
+        clearBuff();
+        cout << "I call bullshit on that!!!!!" << endl;
+        cin >> charge;
     }
+    atom.charge = charge;
     clearBuff();
+
     return atom;
 }
 
@@ -254,8 +272,9 @@ void edit(list begin) {
     system("clear");
 }
 
-void show(list begin, bool all) { // если all =true ,тогда будут напечатаны все элементы после указанного(вкл указанный), иначе будет напечатан только указанный элемент
-    int k = 0;
+void show(list begin,
+          bool all) { // если all =true ,тогда будут напечатаны все элементы после указанного(вкл указанный), иначе будет напечатан только указанный элемент
+    int k = 1;
     if (begin == nullptr) {
         puts("List is empty\n");
         return;
@@ -263,8 +282,17 @@ void show(list begin, bool all) { // если all =true ,тогда будут �
     puts("| # |          Name                   | Abbreviation |  Mass  | Charge |");
     puts("------------------------------------------------------------------------");
     if (all) {
+
         while (begin) {
-            printf("|%2d | %-30s  |%-13s |%8lf |%-5d |\n", ++k, begin->data.name,
+            if (k % 10 == 0) {
+                cout << "________________________________________________________________________" << endl;
+                cout << "                 Press ENTER to go to the next page                     " << endl<<endl;
+                getchar();
+                //system("clear");
+                system("cls");
+
+            }
+            printf("|%2d | %-30s  |%-13s |%8lf |%-5d |\n", k++, begin->data.name,
                    begin->data.abr, begin->data.mass, begin->data.charge);
             begin = begin->next;
         }
@@ -363,7 +391,8 @@ int randomNum() {  // Данная функция генерирует ранд�
     return static_cast<int>(dist6(rng));
 }
 
-list fillFileWithRandomData(int amountOfRecords, list begin) { // Эта функция заполняет таблицу элементов  указанным кол-вом элементов 
+list fillFileWithRandomData(int amountOfRecords,
+                            list begin) { // Эта функция заполняет таблицу элементов  указанным кол-вом элементов
     DataType atom;
     char *tmp = new char[30];
     for (int i = 0; i < amountOfRecords + 1; ++i) {
