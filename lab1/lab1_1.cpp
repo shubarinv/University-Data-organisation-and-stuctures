@@ -17,12 +17,13 @@ using namespace std;
  * Найти элемент с самой большой массой.
  */
 struct atom {
-    char name[30]; ///< Название
-    char abr[2]; ///< Сокращение
+    char name[31]; ///< Название
+    char abr[3]; ///< Сокращение
     double mass; ///< Масса
     int charge; ///< Заряд
 };
 typedef struct atom DataType;
+
 
 struct List {
     DataType data;
@@ -132,16 +133,29 @@ DataType input_atom() {
     DataType atom;
     cout << "Name: ";
     cin >> atom.name;
+    atom.name[30] = '\000';
     clearBuff();
     cout << "Abbreviation: ";
     cin >> atom.abr;
+    atom.abr[2] = '\000';
     clearBuff();
     cout << "Mass: ";
     cin >> atom.mass;
+    if (atom.mass <= 0) {
+        system("clear");
+        cout << "Не по госту" << endl;
+        return input_atom();
+    }
     clearBuff();
     cout << "Charge: ";
     cin >> atom.charge;
     //clearBuff();
+    if (atom.charge <= 0) {
+        system("clear");
+        cout << "Не по госту" << endl;
+        return input_atom();
+    }
+    clearBuff();
     return atom;
 }
 

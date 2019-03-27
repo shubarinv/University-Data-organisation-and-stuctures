@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
                 break;
             case '5':
                 int tmp;
-                cout<<"Количесто рандомных элементов: ";
+                cout << "Количество рандомных элементов: ";
                 cin>>tmp;
                 fillFileWithRandomData(i,&q,tmp);
                 break;
