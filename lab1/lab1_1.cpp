@@ -68,11 +68,11 @@ int main(int argc, char *argv[]) {
     char menu = '0';
     list atoms = nullptr;
 
-    string inFileName;
+    string inFileName; // Хранит название файла для чтения и записи
 
-    if (argc == 2)
+    if (argc == 2) // Если в main переданно название файла, то оно присваивается infilename
         inFileName = argv[1];
-    else {
+    else { // иначе спрашиваем название файла у пользователя
         cout << "Введите название файла: " << endl;
         cin >> inFileName;
     }
@@ -240,7 +240,7 @@ void edit(list begin) {
     system("clear");
 }
 
-void show(list begin, bool all) {
+void show(list begin, bool all) { // если all =true ,тогда будут напечатаны все элементы после указанного(вкл указанный), иначе будет напечатан только указанный элемент
     int k = 0;
     if (begin == nullptr) {
         puts("List is empty\n");
@@ -342,14 +342,14 @@ list del(list begin) {
 }
 
 //ONLY FOR DEBUG
-int randomNum() {
+int randomNum() {  // Данная функция генерирует рандомное число
     random_device dev;
     mt19937 rng(dev());
     uniform_int_distribution<mt19937::result_type> dist6(0, 62);
     return static_cast<int>(dist6(rng));
 }
 
-list fillFileWithRandomData(int amountOfRecords, list begin) {
+list fillFileWithRandomData(int amountOfRecords, list begin) { // Эта функция заполняет таблицу элементов  указанным кол-вом элементов 
     DataType atom;
     char *tmp = new char[30];
     for (int i = 0; i < amountOfRecords + 1; ++i) {
