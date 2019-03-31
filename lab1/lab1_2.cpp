@@ -4,179 +4,174 @@
  * Written by Vladimir Shubarin <vhundef@gmail.com>, Feb 2019
  */
 
-/***
- * @author Vladimir Shubarin.
- * @date 19.02.19
- * @file lab1_2.cpp
-*/
-
 #include <cstdlib>
 #include <iostream>
-#include <random>
+#include <windows.h>
 
 using namespace std;
 
-typedef int DataType;
+#include "lab1_2/polynomial_list.h"
 
-class Queue {
-    struct element {
-        DataType data;
-        element *next;
-        double coef; ///< Коэф c в (cx^en)
-        int expon; ///< Степень x
-    }
-            *front, *rear; //индексы головы и хвоста
-public:
-    Queue() { front = rear = nullptr; }
-    ~Queue();        ///<деструктор (освобождение памяти)
-    int Empty(); ///<проверка на пустоту
-    int Full(); ///<проверка на полноту заполнения
-    int Front(); ///<неразрушающее чтение элемента
-    int EnQueue(int x); ///<добавление элемента в очередь
-    int EnQueue(int x, int coef, int powr); ///<@brief добавление элемента в очередь
-    int DeQueue(); ///<извлечение элемента из очереди
+struct num {
+	float coef; /* Коэффициент */
+	int pwr;    /* Степень */
 };
 
+num polinom{1, 1};
+num cplnm{-1, -1};
 
-void clearBuff() {
-    cin.clear();    // Restore input stream to working state
-    cin.ignore(100, '\n');    // Get rid of any garbage that user might have entered}
+void clearBuff() { ///< @brief Чистит буфер
+	cin.clear();     // Restore input stream to working state
+	cin.ignore(1000, '\n'); // Get rid of any garbage that user might have entered}
 }
-/// @param q Указатель на очередь
-/// @param qIndex  ?
-/// @param amountOfRecords Количество рандомногенерируемых записей
-int fillFileWithRandomData(int qIndex, Queue * q, int amountOfRecords);
+
+void enterPolinomial(Queue<struct num> *, int);
+
+void printPolinomial(Queue<struct num> *);
+
+void diffPolinomial(Queue<struct num> *);
 
 int main(int argc, char *argv[]) {
-    setlocale(LC_CTYPE, "rus");
-    char menu = '0';
-    Queue q;
-    int i = 0;
-    while (menu != '4') {
-        cout << "1. Добавить элемент" << endl;
-        cout << "2. Посчитать diff(NOT YET IMPLEMENTED)" << endl;
-        cout << "3. Show" << endl;
-        cout << "4. Quit" << endl;
-        cout << "5. Заполнить рандомно" << endl;
-        cin >> menu;
-        clearBuff();
-        switch (menu) {
-            case '1':
-                q.EnQueue(i);
-                i++;
-                break;
-            case '2':
-                throw;
-            case '3':
-                while (!q.Empty()) {
-                    q.DeQueue();
-                }
-                cout << endl;
-                break;
-            case '5':
-                int tmp;
-                cout<<"Количесто рандомных элементов: ";
-                cin>>tmp;
-                fillFileWithRandomData(i,&q,tmp);
-                break;
-            default:
-                break;
-        }
-    }
-    return 0;
+
+	/* Чтобы русский текст выводился нормально */
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
+	Queue<struct num> polinm;
+
+	bool doOnce = true;
+	char k = 'e';
+	while (k != '0') {
+		cout << "p(x)=C1*X^e1+C2*X^e2+...+Cn*X^en" << endl;
+		cout << "e1>e2>...>en>=0" << endl;
+		cout << "_____________________________" << endl;
+		cout << "1: Задать многочлен 1 " << endl;
+		cout << "2: Удалить многочлен 1 " << endl;
+		if (doOnce)
+			cout << "3: Продифференцировать многочлен " << endl;
+		cout << "4: Вывести многочлен " << endl;
+		cout << "0:Выход" << endl;
+		cout << endl;
+		cin >> k;
+
+		switch (k) {
+			case '1':
+				int n;
+				cout << "Введите количество элементов в многочлене: ";
+				cin >> n;
+				enterPolinomial(&polinm, n);
+				break;
+			case '2':
+				system("cls");
+				polinm.~Queue();
+				cout << "Многочлен был удалён" << endl;
+				break;
+			case '3':
+				if (doOnce) {
+					diffPolinomial(&polinm);
+					doOnce = false;
+				} else cout << "Функция отключена";
+				break;
+			case '4':
+				printPolinomial(&polinm);
+				break;
+		}
+	}
+	return 0;
+}
+void printPolinomial(Queue<struct num> *queue) {
+	system("cls");
+	polinom = {1, 1};
+	cplnm = {-1, -1};
+	cout << "==============" << endl;
+	if (!queue->Empty()) {
+		while (cplnm.pwr < polinom.pwr) {
+			polinom = queue->DeQueue();
+			cout << polinom.coef << "X^" << polinom.pwr << "+ ";
+			queue->EnQueue(polinom);
+			cplnm = queue->Front();
+		}
+		cout << endl << "==============" << endl;
+	} else
+		cout << "Пустой многочлен" << endl;
 }
 
-
-int Queue::Empty() {
-    return front == nullptr;
+void diffPolinomial(Queue<struct num> *queue) {
+	system("cls");
+	polinom = {1, 1};
+	cplnm = {-1, -1};
+	if (!queue->Empty())
+		while (cplnm.pwr < polinom.pwr) {
+			polinom = queue->DeQueue();
+			polinom.coef *= polinom.pwr;
+			polinom.pwr--;
+			queue->EnQueue(polinom);
+			cplnm = queue->Front();
+		}
+	cout << endl << "Продифференцированно !" << endl;
 }
 
-int Queue::Full() {
-    element *temp = new(std::nothrow) element;
-    if (temp == nullptr) return 1;
-    delete temp;
-    return 0;
-}
+void enterPolinomial(Queue<struct num> *queue, int n) {
+	system("cls");
+	if (queue->Empty()) {
+		int tmp;
+		clearBuff();
+		while (n < 1) {
+			cout << "Кол-во элементов не может быть < 1 . Please try again ";
+			cin >> n;
+			clearBuff();
+		}
+		cout << "Введите коэф. Х: ";
+		cin >> polinom.coef;
+		clearBuff();
+		while (polinom.coef == 0) {
+			cout << "Многочлен не может существовать если коэф. Х = 0 . Please try again ";
+			cin >> polinom.coef;
+			clearBuff();
+		}
+		cout << "Введите степень: ";
+		cin >> polinom.pwr;
+		tmp = polinom.pwr;
+		queue->EnQueue(polinom);
+		n--;
+		while (n > 0) {
+			if (tmp == 0) {
+				cout << "Ввод не может быть продолжен т.к степень не может быть (<) или (=) 0";
+				break;
+			}
+			cout << "Введите коэф. Х: ";
+			cin >> polinom.coef;
+			clearBuff();
+			while (polinom.coef == 0) {
+				cout << "Многочлен не может существовать если коэф. Х = 0 . Please try again ";
+				cin >> polinom.coef;
+				clearBuff();
+			}
+			cout << "Введите степень: ";
+			cin >> polinom.pwr;
+			clearBuff();
+			while (polinom.pwr >= tmp || polinom.pwr < 0) {
+				cout << "Степень должна быть меньше предыдущей и больше 0: ";
+				cin >> polinom.pwr;
+				clearBuff();
+			}
+			tmp = polinom.pwr;
+			queue->EnQueue(polinom);
+			n--;
+		}
+		cout << "Многочлен задан" << endl;
+	} else
+		cout << "Многочлен уже был задан" << endl;
 
-DataType Queue::Front() {
-    return front->data;
-}
-
-int Queue::EnQueue(DataType x) {
-    element *temp = new(std::nothrow) element;
-    if (temp == nullptr) return 1;
-    temp->data = x;
-    temp->next = nullptr;
-    if (front == nullptr)
-        front = rear = temp;
-    else {
-        rear->next = temp;
-        rear = rear->next;
-    }
-    cout << "Введите коэффициент C: ";
-    cin >> temp->coef;
-    cout << endl << "Введите показатель степени e: ";
-    cin >> temp->expon;
-    cout << endl;
-    if (temp->expon < 0) {
-        return 0;
-    }
-    return 1;
-}
-
-
-Queue::~Queue() {
-    element *temp = front;
-    while (front) {
-        temp = front;
-        front = front->next;
-        delete temp;
-    }
-}
-
-/// @brief Somewhy returns element index... not that it is useful in this case
-DataType Queue::DeQueue() {
-    DataType temp = front->data;
-    element *tmp = front;
-    tmp->coef;///< Пример получения коэф.-та
-    tmp->expon;///< Пример получения показателя степени
-    cout << tmp->coef << "*x^" << tmp->expon;
-    front = front->next;
-    delete tmp;
-    if (front != nullptr) cout << "+";
-    return temp;
-}
-
-int Queue::EnQueue(DataType x, int coef, int powr) { ///< @warning Only for debug purposes
-    element *temp = new(std::nothrow) element;
-    if (temp == nullptr) return 1;
-    temp->data = x;
-    temp->next = nullptr;
-    if (front == nullptr)
-        front = rear = temp;
-    else {
-        rear->next = temp;
-        rear = rear->next;
-    }
-    temp->coef = coef;
-    temp->expon = powr;
-    if (temp->expon < 0) {
-        return 0;
-    }
-    return 1;
-}
-
-int randomNum() { ///< @brief Генерирует случайные числа от 0 до 100 @bug на windows не работает
-    random_device dev;
-    mt19937 rng(dev());
-    uniform_int_distribution<mt19937::result_type> dist6(1, 100);
-    return static_cast<int>(dist6(rng));
-}
-
-int fillFileWithRandomData(int qIndex, Queue * q, int amountOfRecords) {
-    int i;
-    for (i = qIndex; i < amountOfRecords; i++) {
-        q->EnQueue(qIndex, randomNum(), randomNum());
-    }
-    return i;
+	// Просмотр многочлена
+	if (!queue->Empty()) {
+		cout << endl << "==============" << endl;
+		while (cplnm.pwr < polinom.pwr) {
+			polinom = queue->DeQueue();
+			cout << polinom.coef << "X^" << polinom.pwr << "+ ";
+			queue->EnQueue(polinom);
+			cplnm = queue->Front();
+		}
+		cout << endl << "==============" << endl;
+	}
 }
