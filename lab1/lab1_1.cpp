@@ -3,11 +3,12 @@
  * Proprietary and confidential
  * Written by Vladimir Shubarin <vhundef@gmail.com>, Feb 2019
  */
-#include <cstring>
-#include <iostream>
-#include <random>
-#include <string>
+
 #include <utility>
+#include <string>
+#include <iostream>
+#include <cstring>
+#include <random>
 
 using namespace std;
 /*
@@ -21,6 +22,7 @@ struct atom {
 	char abr[3];   ///< Сокращение
 	double mass;   ///< Масса
 	int charge{0}; ///< Заряд
+
 };
 typedef struct atom DataType;
 
@@ -34,9 +36,8 @@ typedef List *list;
 DataType input_atom();
 
 void clearBuff() { ///< @brief Чистит буфер
-	cin.clear();     // Restore input stream to working state
-	cin.ignore(1000,
-	           '\n'); // Get rid of any garbage that user might have entered}
+    cin.clear();    // Restore input stream to working state
+    cin.ignore(1000, '\n');    // Get rid of any garbage that user might have entered}
 }
 
 list add(list begin, DataType atom);
@@ -71,8 +72,7 @@ int main(int argc, char *argv[]) {
 
 	string inFileName; // Хранит название файла для чтения и записи
 
-	if (argc == 2) // Если в main переданно название файла, то оно присваивается
-		// infilename
+	if (argc == 2) // Если в main переданно название файла, то оно присваивается infilename
 		inFileName = argv[1];
 	else { // иначе спрашиваем название файла у пользователя
 		cout << "Введите название файла: " << endl;
@@ -281,21 +281,14 @@ void show(list begin,
 		puts("List is empty\n");
 		return;
 	}
-	puts("| # |          Name                   | Abbreviation |  Mass  | Charge "
-	     "|");
-	puts("-----------------------------------------------------------------------"
-	     "-");
+	puts("| # |          Name                   | Abbreviation |  Mass  | Charge |");
+	puts("------------------------------------------------------------------------");
 	if (all) {
 
 		while (begin) {
 			if (k % 10 == 0) {
-				cout << "______________________________________________________________"
-				        "__________"
-				     << endl;
-				cout << "                 Press ENTER to go to the next page           "
-				        "          "
-				     << endl
-				     << endl;
+				cout << "________________________________________________________________________"<< endl;
+				cout << "                 Press ENTER to go to the next page                     "<< endl<< endl;
 				getchar();
 				// system("clear");
 				system("cls");
@@ -308,8 +301,7 @@ void show(list begin,
 		printf("|%2s | %-30s  |%-13s |%8lf |%-5d |\n", " ", begin->data.name,
 		       begin->data.abr, begin->data.mass, begin->data.charge);
 	}
-	puts("-----------------------------------------------------------------------"
-	     "-");
+	puts("------------------------------------------------------------------------");
 }
 
 list findMax(list begin) {

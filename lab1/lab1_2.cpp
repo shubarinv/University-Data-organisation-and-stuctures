@@ -1,6 +1,8 @@
-//
-// Created by vhund on 27.03.2019.
-//
+/* Copyright (C) Vladimir Shubarin - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Vladimir Shubarin <vhundef@gmail.com>, Feb 2019
+ */
 
 #include <cstdlib>
 #include <iostream>
@@ -77,7 +79,6 @@ int main(int argc, char *argv[]) {
 	}
 	return 0;
 }
-
 void printPolinomial(Queue<struct num> *queue) {
 	system("cls");
 	polinom = {1, 1};
