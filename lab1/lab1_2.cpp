@@ -6,7 +6,7 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <windows.h>
+//#include <windows.h>
 
 using namespace std;
 
@@ -34,8 +34,8 @@ void diffPolinomial(Queue<struct num> *);
 int main(int argc, char *argv[]) {
 
 	/* Чтобы русский текст выводился нормально */
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
+//	SetConsoleCP(1251);
+//	SetConsoleOutputCP(1251);
 
 	Queue<struct num> polinm;
 
@@ -79,6 +79,7 @@ int main(int argc, char *argv[]) {
 	}
 	return 0;
 }
+
 void printPolinomial(Queue<struct num> *queue) {
 	system("cls");
 	polinom = {1, 1};
