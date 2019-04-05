@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-/// - Q: Did you stole this code from somewhere?
-/// - A: OFC I did
-
-#include <stdio.h>
 #include <limits.h>
+// - Q: Did you stole this code from somewhere?
+// - A: OFC I did
+
+/*
+ * Заданы две системы двусторонних дорог с одним и тем же множеством городов (железные и шоссейные дороги).
+ * Найти минимальный по длине путь из города А в город В (который может проходить как по железным, так и по шоссейным дорогам),
+ * и места пересадок с одного вида транспорта на другой на этом пути.
+ * А и В вводятся с клавиатуры.
+ */
 
 // Number of vertices in the graph
 #define V 8
