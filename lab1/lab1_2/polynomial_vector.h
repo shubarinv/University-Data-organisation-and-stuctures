@@ -20,25 +20,26 @@ public:
 		rear = MAXLENGTH - 1;
 	}
 
-	int Empty(void); //проверка на пустоту
-	int Full(void);  //проверка на полноту заполнения
-	DataType Front(void); //неразрушающее чтение элемента
+	bool Empty(); //проверка на пустоту
+	bool Full();  //проверка на полноту заполнения
+	DataType Front(); //неразрушающее чтение элемента
 	int EnQueue(DataType x); //добавление элемента в очередь
-	DataType DeQueue(void); //извлечение элемента из очереди
+	DataType DeQueue(); //извлечение элемента из очереди
+	~Queue();
 };
 
 template<class DataType>
-int Queue<DataType>::Empty(void) {
+bool Queue<DataType>::Empty() {
 	return (rear + 1) % MAXLENGTH == front;
 }
 
 template<class DataType>
-int Queue<DataType>::Full(void) {
+bool Queue<DataType>::Full() {
 	return (rear + 2) % MAXLENGTH == front;
 }
 
 template<class DataType>
-DataType Queue<DataType>::Front(void) {
+DataType Queue<DataType>::Front() {
 	return data[front];
 }
 
@@ -52,8 +53,15 @@ int Queue<DataType>::EnQueue(DataType x) {
 }
 
 template<class DataType>
-DataType Queue<DataType>::DeQueue(void) {
+DataType Queue<DataType>::DeQueue() {
 	int temp = front;
 	front = (front + 1) % MAXLENGTH;
 	return data[temp];
+}
+
+template<class DataType>
+Queue<DataType>::~Queue() {
+	while (!Empty()) {
+		DeQueue();
+	}
 }

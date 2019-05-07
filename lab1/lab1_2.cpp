@@ -10,7 +10,7 @@
 
 using namespace std;
 
-#include "lab1_2/polynomial_list.h"
+#include "lab1_2/polynomial_vector.h"
 
 struct num {
 	float coef; /* Коэффициент */
@@ -32,10 +32,6 @@ void printPolinomial(Queue<struct num> *);
 void diffPolinomial(Queue<struct num> *);
 
 int main(int argc, char *argv[]) {
-
-	/* Чтобы русский текст выводился нормально */
-//	SetConsoleCP(1251);
-//	SetConsoleOutputCP(1251);
 
 	Queue<struct num> polinm;
 
@@ -62,7 +58,7 @@ int main(int argc, char *argv[]) {
 				enterPolinomial(&polinm, n);
 				break;
 			case '2':
-				system("cls");
+				system("clear");
 				polinm.~Queue();
 				cout << "Многочлен был удалён" << endl;
 				break;
@@ -75,13 +71,15 @@ int main(int argc, char *argv[]) {
 			case '4':
 				printPolinomial(&polinm);
 				break;
+			default:
+				throw;
 		}
 	}
 	return 0;
 }
 
 void printPolinomial(Queue<struct num> *queue) {
-	system("cls");
+	system("clear");
 	polinom = {1, 1};
 	cplnm = {-1, -1};
 	cout << "==============" << endl;
@@ -98,7 +96,7 @@ void printPolinomial(Queue<struct num> *queue) {
 }
 
 void diffPolinomial(Queue<struct num> *queue) {
-	system("cls");
+	system("clear");
 	polinom = {1, 1};
 	cplnm = {-1, -1};
 	if (!queue->Empty())
@@ -113,7 +111,7 @@ void diffPolinomial(Queue<struct num> *queue) {
 }
 
 void enterPolinomial(Queue<struct num> *queue, int n) {
-	system("cls");
+	system("clear");
 	if (queue->Empty()) {
 		int tmp;
 		clearBuff();

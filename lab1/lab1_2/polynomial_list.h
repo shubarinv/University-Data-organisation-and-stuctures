@@ -22,20 +22,20 @@ public:
 	Queue() { front = rear = nullptr; }
 
 	~Queue();    ///< деструктор (освобождение памяти)
-	int Empty(); ///< проверка на пустоту
-	int Full();  ///< проверка на полноту заполнения
+	bool Empty(); ///< проверка на пустоту
+	bool Full();  ///< проверка на полноту заполнения
 	DataType Front(); ///< неразрушающее чтение элемента
 	int EnQueue(DataType x); ///< добавление элемента в очередь
 	DataType DeQueue(); ///< извлечение элемента из очереди
 };
 
 template<class DataType>
-int Queue<DataType>::Empty() {
+bool Queue<DataType>::Empty() {
 	return front == nullptr;
 }
 
 template<class DataType>
-int Queue<DataType>::Full() {
+bool Queue<DataType>::Full() {
 	element *temp = new element;
 	if (temp == nullptr)
 		return 1;
