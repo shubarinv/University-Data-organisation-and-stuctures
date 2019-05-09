@@ -18,7 +18,7 @@ using namespace std;
  * Найти элемент с самой большой массой.
  */
 struct atom {
-	char name[31]{"ERR NAME WASN'T SET"}; ///< Название
+	char name[31]{"ПРОИЗОШЛАОШИБКА"}; ///< Название
 	char abr[3]{"ER"};   ///< Сокращение
 	double mass{0};   ///< Масса
 	int charge{0}; ///< Заряд
@@ -68,7 +68,6 @@ list findElmntByAbbr(list);
 /// @brief Заполняет массив случайными элементами
 list fillFileWithRandomData(int, list);
 
-
 int main(int argc, char *argv[]) {
 	char menu = '0';
 	list atoms = nullptr;
@@ -90,7 +89,6 @@ int main(int argc, char *argv[]) {
 		cout << "5. Find Element by Abbr" << endl;
 		cout << "6. Delete record" << endl;
 		cout << "7. Quit" << endl;
-		cout << "8. Random fill" << endl;
 
 		cin >> menu;
 		clearBuff();
@@ -121,7 +119,7 @@ int main(int argc, char *argv[]) {
 				break;
 			case '8':
 				system("clear");
-				//	atoms = fillFileWithRandomData(80, atoms);
+				atoms = fillFileWithRandomData(10, atoms);
 				break;
 
 			default:
@@ -152,7 +150,7 @@ list add(list begin, atom atom, bool bIsAuto) {
 		     << endl;
 		cin >> tmp;
 	} else
-		tmp = 3;
+		tmp = '3';
 	if (tmp == '1') {
 		begin = new struct List;
 		begin->data = atom;
@@ -188,7 +186,7 @@ list add(list begin, atom atom, bool bIsAuto) {
 		temp->next = new struct List;
 		temp = temp->next;
 		temp->prev = prev;
-		temp->data = atom;
+		temp->data=atom;
 	}
 	return head;
 }
@@ -198,7 +196,7 @@ atom input_atom() {
 	atom atom;
 
 	string tmp;
-	cout << "Name: ";
+	cout << "Название: ";
 	cin >> tmp;
 	for (int i = 0; i < 30; ++i) {
 		atom.name[i] = tmp[i];
@@ -207,7 +205,7 @@ atom input_atom() {
 	clearBuff();
 
 	tmp.clear();
-	cout << "Abbreviation: ";
+	cout << "Обозначение: ";
 	cin >> tmp;
 	for (int i = 0; i < 2; ++i) {
 		atom.abr[i] = tmp[i];
@@ -216,22 +214,22 @@ atom input_atom() {
 	clearBuff();
 
 	double mass;
-	cout << "Mass: ";
+	cout << "Масса: ";
 	cin >> mass;
 	while (mass <= 0) {
 		clearBuff();
-		cout << "Invalid value! Try again" << endl;
+		cout << "Некорректный ввод! " << endl;
 		cin >> mass;
 	}
 	atom.mass = mass;
 	clearBuff();
 
 	int charge;
-	cout << "Charge: ";
+	cout << "Заряд: ";
 	cin >> charge;
 	while (charge <= 0) {
 		clearBuff();
-		cout << "Invalid value! Try again" << endl;
+		cout << "Некорректный ввод! " << endl;
 		cin >> charge;
 	}
 	atom.charge = charge;
@@ -240,11 +238,11 @@ atom input_atom() {
 }
 
 list readFile(const string &fileName, list begin) {
-	cout << "\n========\nReading file -";
+	cout << "\n========\nЧтение файла -";
 	FILE *f;
 	atom atom;
 	if ((f = fopen(fileName.c_str(), "rb")) == nullptr) {
-		cout << "ERROR" << endl << endl;
+		cout << "Ошибка" << endl << endl;
 		perror("");
 		return begin;
 	}
@@ -261,7 +259,7 @@ void edit(list begin) {
 	char yes;
 	system("clear");
 	if (begin == nullptr) {
-		cout << "List is empty\n";
+		cout << "Список пуст\n";
 		return;
 	}
 	cout << "Номер записи которую надо отредактировать? ";
@@ -378,10 +376,10 @@ list findElmntByAbbr(list begin) {
 }
 
 void writeFile(const string &filename, list begin) {
-	cout << "\n========\nWriting file -";
+	cout << "\n========\nЗапись файла -";
 	FILE *f;
 	if ((f = fopen(filename.c_str(), "wb")) == nullptr) {
-		perror("Error create file");
+		perror("Ошибка создания файла");
 		system("pause");
 		return;
 	}
@@ -399,4 +397,37 @@ void deleteList(list begin) {
 		free(temp);
 		temp = begin;
 	}
+}
+
+// ONLY FOR DEBUG
+int randomNum() { // Данная функция генерирует рандомное число
+	random_device dev;
+	mt19937 rng(dev());
+	uniform_int_distribution<mt19937::result_type> dist6(0, 62);
+	return static_cast<int>(dist6(rng));
+}
+
+list fillFileWithRandomData(
+		int amountOfRecords,
+		list begin) { // Эта функция заполняет таблицу элементов  указанным кол-вом
+	// элементов
+	atom atom;
+	char *tmp = new char[30];
+	for (int i = 0; i < amountOfRecords + 1; ++i) {
+		const char charset[] =
+				"0123456789QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+		for (int j = 0; j < 12; ++j) {
+			tmp[j] = charset[randomNum()];
+		}
+		strcpy(atom.name, tmp);
+		for (int j = 0; j < 2; ++j) {
+			tmp[j] = charset[randomNum()];
+		}
+		strcpy(atom.abr, tmp);
+		atom.mass = randomNum() + randomNum();
+		atom.charge = randomNum() + randomNum();
+		begin = add(begin, atom, true);
+	}
+	system("clear");
+	return begin;
 }
