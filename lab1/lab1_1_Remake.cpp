@@ -163,7 +163,7 @@ list add(list begin, atom atom, bool bIsAuto) {
 		int tmp1;
 		begin = new struct List;
 		begin->data = atom;
-		cout << "После какого элемента: ";
+		cout << "После какого элемента(номер): ";
 		cin >> tmp1;
 		tmp1--;
 		for (int i = 0; i < tmp1; i++) {
@@ -186,7 +186,7 @@ list add(list begin, atom atom, bool bIsAuto) {
 		temp->next = new struct List;
 		temp = temp->next;
 		temp->prev = prev;
-		temp->data=atom;
+		temp->data = atom;
 	}
 	return head;
 }
@@ -420,9 +420,15 @@ list fillFileWithRandomData(
 			tmp[j] = charset[randomNum()];
 		}
 		strcpy(atom.name, tmp);
-		for (int j = 0; j < 2; ++j) {
+		int j;
+		for (j = 0; j < 2; ++j) {
 			tmp[j] = charset[randomNum()];
+			if (j == 1)
+				tmp[j] = tolower(tmp[j]);
+			if (j == 0)
+				tmp[j] = toupper(tmp[j]);
 		}
+		tmp[2] = '\0';
 		strcpy(atom.abr, tmp);
 		atom.mass = randomNum() + randomNum();
 		atom.charge = randomNum() + randomNum();

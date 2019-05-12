@@ -11,6 +11,18 @@ void clearBuff() { ///< @brief Чистит буфер
 	cin.clear();    // Restore input stream to working state
 	cin.ignore(1000, '\n');    // Get rid of any garbage that user might have entered}
 }
+int checkedIntImp()
+{
+	int x;
+	cin >> x;
+	while(cin.fail()||x<0){
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(),'\n');
+		cout << "Некорректный ввод, введите ЦИФЕРКИ(>=0): ";
+		cin >> x;
+	}
+	return x;
+}
 
 int minDistance(const int dist[],
                 const bool sptSet[]) {
@@ -130,28 +142,30 @@ int main() {
 	start = 1;
 	cout << "_____Введите A и B для обычных дорог____" << endl;
 	for (int i = 2; i < V; ++i) {
-		cout << "Введите расстояние от A до " << city[i];
-		cin >> highways[0][i];
+		cout << "Введите расстояние от A до " << city[i]<<" ";
+		highways[0][i]=checkedIntImp();
 		clearBuff();
 		highways[i][0]= highways[0][i];
 	}
 	for (int i = 2; i < V; ++i) {
-		cout << "Введите расстояние от B до " << city[i];
-		cin >> highways[1][i];
+		cout << "Введите расстояние от B до " << city[i]<<" ";
+		highways[1][i]=checkedIntImp();
 		clearBuff();
 		highways[i][1]= highways[1][i];
 	}
 
 	cout << endl << "_____Введите A и B для ЖД____" << endl;
 	for (int i = 2; i < V; ++i) {
-		cout << "Введите расстояние от A до " << city[i];
-		cin >> railroads[0][i];
+		cout << "Введите расстояние от A до " << city[i]<<" ";
+
+		railroads[0][i]=checkedIntImp();
 		clearBuff();
 		railroads[i][0] = railroads[0][i];
 	}
 	for (int i = 2; i < V; ++i) {
-		cout << "Введите расстояние от B до " << city[i];
-		cin >> railroads[1][i];
+		cout << "Введите расстояние от B до " << city[i]<<" ";
+
+		railroads[1][i]=checkedIntImp();
 		clearBuff();
 		railroads[i][1] = railroads[1][i];
 	}
