@@ -101,7 +101,7 @@ TreeNode<NodeType> *Tree<NodeType>::delete_node(TreeNode<NodeType> *z) {
 
 template<class NodeType>
 TreeNode<NodeType> *Tree<NodeType>::find_max(TreeNode<NodeType> *x) {
-	while (x->getRight() != 0)  /// здесь все очевидно - самыое максимальное значение у самого правого
+	while (x->getRight() != 0)  /// здесь все очевидно - самое максимальное значение у самого правого
 		x = x->getRight();
 	return x;
 }

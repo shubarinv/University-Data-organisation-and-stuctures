@@ -42,7 +42,7 @@ void clearBuff() { ///< @brief Чистит буфер
 
 atom input_atom(); ///< Добавление элемента
 
-list add(list begin, atom atom, bool);
+list add(list begin, atom atom);
 
 /// @param filename Название файла для записи
 void writeFile(const string &filename, list begin);
@@ -67,6 +67,8 @@ list findElmntByAbbr(list);
 
 /// @brief Заполняет массив случайными элементами
 list fillFileWithRandomData(int, list);
+
+void sort();
 
 int main(int argc, char *argv[]) {
 	char menu = '0';
@@ -95,11 +97,13 @@ int main(int argc, char *argv[]) {
 		switch (menu) {
 			case '1':
 				system("clear");
-				atoms = add(atoms, input_atom(), false); ///< позволяет пользователю ввести элемент
+				atoms = add(atoms, input_atom()); ///< позволяет пользователю ввести элемент
+				sort();
 				break;
 			case '2':
 				system("clear");
 				edit(atoms); ///< Радактирование элемента
+				sort();
 				break;
 			case '3':
 				system("clear");
@@ -121,6 +125,10 @@ int main(int argc, char *argv[]) {
 				system("clear");
 				atoms = fillFileWithRandomData(10, atoms);
 				break;
+			case '9':
+				system("clear");
+				sort();
+				break;
 
 			default:
 				break;
@@ -131,8 +139,8 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-list add(list begin, atom atom, bool bIsAuto) {
-	list temp = begin;
+list add(list begin, atom atom) {
+	list temp;
 	if (begin == nullptr) {
 		begin = new struct List;
 		head = tail = begin;
@@ -142,52 +150,19 @@ list add(list begin, atom atom, bool bIsAuto) {
 		system("clear");
 		return begin;
 	}
-	char tmp = '-';
-	if (!bIsAuto) {
-
-		cout << "Куда добавить элемент?" << endl
-		     << "1) В начало списка\n2) После указанного элемента\n3) В конец списка\n"
-		     << endl;
-		cin >> tmp;
-	} else
-		tmp = '3';
-	if (tmp == '1') {
-		begin = new struct List;
-		begin->data = atom;
-		begin->next = head;
-		head->prev = begin;
-		head = begin;
-		return head;
-
-	} else if (tmp == '2') {
-		int tmp1;
-		begin = new struct List;
-		begin->data = atom;
-		cout << "После какого элемента(номер): ";
-		cin >> tmp1;
-		tmp1--;
-		for (int i = 0; i < tmp1; i++) {
-			temp = temp->next;
-		}
-		begin->next = temp->next;
-		begin->prev = temp;
-		temp->next = begin;
-
-		return head;
-	} else if (tmp == '3') {
-		temp = begin;
-		list prev;
-		while (temp->next) {
-			prev = temp;
-			temp = temp->next;
-			temp->prev = prev;
-		}
+	temp = begin;
+	list prev;
+	while (temp->next) {
 		prev = temp;
-		temp->next = new struct List;
 		temp = temp->next;
 		temp->prev = prev;
-		temp->data = atom;
 	}
+	prev = temp;
+	temp->next = new struct List;
+	temp = temp->next;
+	temp->prev = prev;
+	temp->data = atom;
+
 	return head;
 }
 
@@ -247,7 +222,7 @@ list readFile(const string &fileName, list begin) {
 		return begin;
 	}
 	while (fread(&atom, sizeof(atom), 1, f))
-		begin = add(begin, atom, true);
+		begin = add(begin, atom);
 	fclose(f);
 	cout << "OK\n========\n" << endl;
 	return begin;
@@ -432,8 +407,40 @@ list fillFileWithRandomData(
 		strcpy(atom.abr, tmp);
 		atom.mass = randomNum() + randomNum();
 		atom.charge = randomNum() + randomNum();
-		begin = add(begin, atom, true);
+		begin = add(begin, atom);
 	}
 	system("clear");
 	return begin;
+}
+
+
+void sort() {
+	list tmp, a, begin = head;
+	bool flag = true;
+	while (flag) {
+		tmp = head;
+		a = tmp->next;
+		flag = false;
+		while (a) {
+			if ((tmp->data.mass) > (a->data.mass)) {
+				begin->data = tmp->data;
+				tmp->data = a->data;
+				a->data = begin->data;
+				flag = true;
+			}
+
+			tmp = tmp->next;
+			a = a->next;
+
+		}
+	}
+	begin=head;
+	int i=1;
+	while (begin->next != nullptr){
+		if (begin->data.charge == begin->next->data.charge) {
+			throw runtime_error("Excuse me! What the actual fuck?\nElement: "+to_string(i)+" = element: "+to_string(i+1));
+		}
+		i++;
+		begin=begin->next;
+	}
 }
