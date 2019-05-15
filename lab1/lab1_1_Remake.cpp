@@ -415,32 +415,26 @@ list fillFileWithRandomData(
 
 
 void sort() {
-	list tmp, a, begin = head;
+	list tmp, a, b = new struct List;
 	bool flag = true;
+	int i = 0;
 	while (flag) {
 		tmp = head;
 		a = tmp->next;
 		flag = false;
 		while (a) {
 			if ((tmp->data.mass) > (a->data.mass)) {
-				begin->data = tmp->data;
+				b->data = tmp->data;
 				tmp->data = a->data;
-				a->data = begin->data;
+				a->data = b->data;
 				flag = true;
+				i++;
 			}
 
 			tmp = tmp->next;
 			a = a->next;
 
 		}
-	}
-	begin=head;
-	int i=1;
-	while (begin->next != nullptr){
-		if (begin->data.charge == begin->next->data.charge) {
-			throw runtime_error("Excuse me! What the actual fuck?\nElement: "+to_string(i)+" = element: "+to_string(i+1));
-		}
 		i++;
-		begin=begin->next;
 	}
 }
