@@ -6,6 +6,8 @@
 
 using namespace std;
 
+// Did I snatch this code from the Internet? -Well, https://www.youtube.com/watch?v=7uTFsn7na3A
+
 int main() {
 	Tree<int> intTree;           /* создаем новой бинароное дерево с ключем типа int */
 	int a;
