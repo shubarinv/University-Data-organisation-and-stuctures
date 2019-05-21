@@ -46,11 +46,19 @@ public:
 	void setData(NodeType dt) {
 		TreeNode::data = dt;
 	}
+	TreeNode(const TreeNode & n);
 
 protected:
 	NodeType data; // Ключ
 
 };
 
+/*
+template<class NodeType>
+TreeNode<NodeType>::TreeNode(const TreeNode &n) {
+	std::cout<<"Gonna get SEGFault"<<std::endl;
+	right=new TreeNode(*(n.right));
+}
+ */
 
 #endif //UNIVERSITY_DATA_ORGANISATION_AND_STUCTURES_TREE_NODE_H

@@ -28,17 +28,17 @@ double validInput()
 }
 
 int main() {
-	Tree<double> dbTree;           /* создаем новое бинароное дерево с ключем типа int */
+	Tree<double> dbTree;           // создаем новое бинароное дерево с ключем типа int
 	Tree<double> dbTree1;
 	double a;
-	cout << "10 numbers:" << endl;   /* заполняем его */
+	cout << "10 numbers:" << endl;   // заполняем его
 	for (int i = 0; i < 10; i++) {
 		a=validInput();
 		clearBuff();
 		dbTree.insert_node(a);
 	}
-	cout << endl << "inorder_walk:" << endl;              /* обходим */
-	dbTree.inorder_walk(dbTree.get_root());       /* вот для этого понадобился метод get_root() :-) */
+	cout << endl << "inorder_walk:" << endl;              // обходим 
+	dbTree.inorder_walk(dbTree.get_root());       // вот для этого понадобился метод get_root()
 	cout << endl << "Minimum is: " << (dbTree.find_min(dbTree.get_root()))->getData() << endl;
 	cout << endl << "Maximum is: " << (dbTree.find_max(dbTree.get_root()))->getData() << endl;
 	cout<<"Введите число, которое вы хотите удалить: ";
