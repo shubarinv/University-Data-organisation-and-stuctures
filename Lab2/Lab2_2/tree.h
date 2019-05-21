@@ -43,7 +43,7 @@ Tree<NodeType>::Tree() {
 template<class NodeType>
 int Tree<NodeType>::insert_node(const NodeType &x) {
 
-	TreeNode<NodeType> *nw = new TreeNode<NodeType>(x); // Новый узел
+	auto *nw = new TreeNode<NodeType>(x); // Новый узел
 	TreeNode<NodeType> *ptr = nullptr, *ptr1 = nullptr;
 
 	nw->setParent(nullptr);
@@ -150,7 +150,6 @@ TreeNode<NodeType> *Tree<NodeType>::find_node(TreeNode<NodeType> *n,const NodeTy
 		return find_node(n->getRight(), val);
 	else
 		return find_node(n->getLeft(), val);
-	throw;
 }
 
 template<class NodeType>
