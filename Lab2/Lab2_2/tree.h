@@ -73,8 +73,14 @@ int Tree<NodeType>::insert_node(const NodeType &x) {
 
 template<class NodeType>
 TreeNode<NodeType> *Tree<NodeType>::delete_node(TreeNode<NodeType> *z) {
+	NodeType a;
 	TreeNode<NodeType> *y;
 	TreeNode<NodeType> *x;
+	if (z== nullptr){
+		cout<<"Нет такого числа"<<endl;
+		return nullptr;
+
+	}
 	if (z->getLeft() == nullptr || z->getRight() ==
 	                               nullptr) ///< в этой и следующих двух строках ищем вершину y, которую мы потом вырежем из дерева. Это либо z, либо следующий за z
 		y = z;
@@ -84,6 +90,7 @@ TreeNode<NodeType> *Tree<NodeType>::delete_node(TreeNode<NodeType> *z) {
 		x = y->getLeft();
 	else
 		x = y->getRight();
+
 	if (x != 0) ///< эта и следующие 9 строк - вырезание y
 		x->setParent(y->getParent());
 	if (y->getParent() == 0)
