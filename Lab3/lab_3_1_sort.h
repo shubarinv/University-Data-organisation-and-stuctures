@@ -44,6 +44,8 @@ void Lab3_1_Sort::insertionSort(int *arrayPtr, int length) {
 	}
 	setTEnd();
 	std::cout<<"Сортировка заняла "<<calcTimeDiffInMs()<<" мс"<<std::endl;
+	if(calcTimeDiffInMs()<1)
+		throw std::runtime_error("Кто-то не отчистил память?");
 	//return ;
 
 }

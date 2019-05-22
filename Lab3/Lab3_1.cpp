@@ -16,31 +16,39 @@ int main(){
 
 
 
-	int *arr,tmp,i=0;
+	int *arr,tmp,i=0,arrM[150000];
 
 	cout<<"=============\nСортировка простыми вставками\n=============\n";
-	//For N1
-	arr=new int[15000];
-
-	cout<<"N1 15000 элементов"<<endl;
 
 	ifstream infile("unsorted.txt");
-	while ((infile >> tmp)&&i<=15000){
-		arr[i]=tmp;
+	while ((infile >> tmp)&&i<=150000){
+		arrM[i]=tmp;
+		i++;
+	}
+	infile.close();
+
+	//For N1
+	arr=new int[15000];
+	i=0;
+	cout<<"N1 15000 элементов"<<endl;
+
+	while (i<=15000){
+		arr[i]=arrM[i];
+		i++;
+	}
+	sort.insertionSort(arr,15001);
+
+	i=0;
+
+	while (i<=15000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.insertionSort(arr,15001);
 	i=0;
-	while ((infile >> tmp)&&i<=15000){
-		arr[i]=tmp;
-		i++;
-	}
-
-	sort.insertionSort(arr,15001);
-	i=0;
-	while ((infile >> tmp)&&i<=15000){
-		arr[i]=tmp;
+	while (i<=15000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
@@ -55,26 +63,24 @@ int main(){
 	arr=new int[40000];
 	i=0;
 
-	while ((infile >> tmp)&&i<=40000){
-		arr[i]=tmp;
+	while (i<=40000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.insertionSort(arr,40001);
 	i=0;
-	while ((infile >> tmp)&&i<=40000){
-		arr[i]=tmp;
+	while (i<=40000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.insertionSort(arr,40001);
 	i=0;
-	while ((infile >> tmp)&&i<=40000){
-		arr[i]=tmp;
+	while (i<=40000){
+		arr[i]=arrM[i];
 		i++;
 	}
-
-	infile.close();
 
 	sort.insertionSort(arr,40001);
 
@@ -86,22 +92,22 @@ int main(){
 	arr=new int[80000];
 	i=0;
 
-	while ((infile >> tmp)&&i<=80000){
-		arr[i]=tmp;
+	while (i<=80000){
+		arr[i]=arrM[i];
+		i++;
+	}
+	sort.insertionSort(arr,80001);
+
+	i=0;
+	while (i<=80000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.insertionSort(arr,80001);
 	i=0;
-	while ((infile >> tmp)&&i<=80000){
-		arr[i]=tmp;
-		i++;
-	}
-
-	sort.insertionSort(arr,80001);
-	i=0;
-	while ((infile >> tmp)&&i<=80000){
-		arr[i]=tmp;
+	while (i<=80000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
@@ -118,22 +124,22 @@ int main(){
 	arr=new int[150000];
 	i=0;
 
-	while ((infile >> tmp)&&i<=150000){
-		arr[i]=tmp;
+	while (i<=150000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.insertionSort(arr,150001);
 	i=0;
-	while ((infile >> tmp)&&i<=150000){
-		arr[i]=tmp;
+	while (i<=150000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.insertionSort(arr,150001);
 	i=0;
-	while ((infile >> tmp)&&i<=150000){
-		arr[i]=tmp;
+	while (i<=150000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
@@ -149,27 +155,25 @@ int main(){
 
 	cout<<"N1 15000 элементов"<<endl;
 
-	infile.open("unsorted.txt");
-	while ((infile >> tmp)&&i<=15000){
-		arr[i]=tmp;
+	i=0;
+	while (i<=15000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.binInsertionSort(arr,15000);
 	i=0;
-	while ((infile >> tmp)&&i<=15000){
-		arr[i]=tmp;
+	while (i<=15000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.binInsertionSort(arr,15000);
 	i=0;
-	while ((infile >> tmp)&&i<=15000){
-		arr[i]=tmp;
+	while (i<=15000){
+		arr[i]=arrM[i];
 		i++;
 	}
-	infile.close();
-
 	sort.binInsertionSort(arr,15000);
 
 	//For N2
@@ -179,26 +183,27 @@ int main(){
 	arr=new int[40000];
 	i=0;
 
-	while ((infile >> tmp)&&i<=40000){
-		arr[i]=tmp;
+	while (i<=40000){
+		arr[i]=arrM[i];
+		i++;
+	}
+	sort.binInsertionSort(arr,40000);
+
+
+	i=0;
+	while (i<=40000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.binInsertionSort(arr,40000);
+
+
 	i=0;
-	while ((infile >> tmp)&&i<=40000){
-		arr[i]=tmp;
+	while (i<=40000){
+		arr[i]=arrM[i];
 		i++;
 	}
-
-	sort.binInsertionSort(arr,40000);
-	i=0;
-	while ((infile >> tmp)&&i<=40000){
-		arr[i]=tmp;
-		i++;
-	}
-
-
 	sort.binInsertionSort(arr,40000);
 
 
@@ -210,26 +215,26 @@ int main(){
 	arr=new int[80000];
 	i=0;
 
-	while ((infile >> tmp)&&i<=80000){
-		arr[i]=tmp;
+	while (i<=80000){
+		arr[i]=arrM[i];
 		i++;
 	}
-
 	sort.binInsertionSort(arr,80000);
+
+
 	i=0;
-	while ((infile >> tmp)&&i<=80000){
-		arr[i]=tmp;
+	while (i<=80000){
+		arr[i]=arrM[i];
 		i++;
 	}
-
 	sort.binInsertionSort(arr,80000);
+
+
 	i=0;
-	while ((infile >> tmp)&&i<=80000){
-		arr[i]=tmp;
+	while (i<=80000) {
+		arr[i] = arrM[i];
 		i++;
 	}
-
-
 	sort.binInsertionSort(arr,80000);
 
 
@@ -240,27 +245,24 @@ int main(){
 	arr=new int[150000];
 	i=0;
 
-	while ((infile >> tmp)&&i<=150000){
-		arr[i]=tmp;
+	while (i<=150000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.binInsertionSort(arr,150000);
 	i=0;
-	while ((infile >> tmp)&&i<=150000){
-		arr[i]=tmp;
+	while (i<=150000){
+		arr[i]=arrM[i];
 		i++;
 	}
 
 	sort.binInsertionSort(arr,150000);
 	i=0;
-	while ((infile >> tmp)&&i<=150000){
-		arr[i]=tmp;
+	while (i<=150000){
+		arr[i]=arrM[i];
 		i++;
 	}
-
-	infile.close();
-
 	sort.binInsertionSort(arr,150000);
 
 
