@@ -17,7 +17,7 @@ int main(){
 		i++;
 	}
 	infile.close();
-/*
+
 	cout<<"=============\nСортировка простыми вставками\n=============\n";
 	cout<<"\nN1 15000 элементов\n"<<endl;
 
@@ -44,7 +44,6 @@ int main(){
 	sortDriver.Sort(arrM,150000,'i');
 	sortDriver.Sort(arrM,150000,'i');
 
-*/
 	cout<<"=============\nСортировка бинарными вставками\n=============\n";
 	cout<<"\nN1 15000 элементов\n"<<endl;
 
@@ -70,5 +69,58 @@ int main(){
 	sortDriver.Sort(arrM,150000,'b');
 	sortDriver.Sort(arrM,150000,'b');
 	sortDriver.Sort(arrM,150000,'b');
+
+
+	cout<<"=============\nПирамидальная Сортировка\n=============\n";
+	cout<<"\nN1 15000 элементов\n"<<endl;
+
+	sortDriver.Sort(arrM,15000,'p');
+	sortDriver.Sort(arrM,15000,'p');
+	sortDriver.Sort(arrM,15000,'p');
+
+
+	cout<<"\nN2 40000 элементов\n"<<endl;
+
+	sortDriver.Sort(arrM,40000,'p');
+	sortDriver.Sort(arrM,40000,'p');
+	sortDriver.Sort(arrM,40000,'p');
+
+	cout<<"\nN3 80000 элементов\n"<<endl;
+
+	sortDriver.Sort(arrM,80000,'p');
+	sortDriver.Sort(arrM,80000,'p');
+	sortDriver.Sort(arrM,80000,'p');
+
+	cout<<"\nN4 150000 элементов\n"<<endl;
+
+	sortDriver.Sort(arrM,150000,'p');
+	sortDriver.Sort(arrM,150000,'p');
+	sortDriver.Sort(arrM,150000,'p');
+
+	cout<<"=============\nXOR Сортировка\n=============\n";
+	cout<<"\nN1 15000 элементов\n"<<endl;
+
+	sortDriver.Sort(arrM,15000,'q');
+	sortDriver.Sort(arrM,15000,'q');
+	sortDriver.Sort(arrM,15000,'q');
+
+
+	cout<<"\nN2 40000 элементов\n"<<endl;
+
+	sortDriver.Sort(arrM,40000,'q');
+	sortDriver.Sort(arrM,40000,'q');
+	sortDriver.Sort(arrM,40000,'q');
+
+	cout<<"\nN3 80000 элементов\n"<<endl;
+
+	sortDriver.Sort(arrM,80000,'q');
+	sortDriver.Sort(arrM,80000,'q');
+	sortDriver.Sort(arrM,80000,'q');
+
+	cout<<"\nN4 150000 элементов\n"<<endl;
+
+	sortDriver.Sort(arrM,150000,'q');
+	sortDriver.Sort(arrM,150000,'q');
+	sortDriver.Sort(arrM,150000,'q');
 
 }

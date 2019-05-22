@@ -15,10 +15,9 @@ public:
 
 	void binInsertionSort(int *, int);
 
-private:
-	std::chrono::time_point<std::chrono::high_resolution_clock> t_start;
-	std::chrono::time_point<std::chrono::high_resolution_clock> t_end;
+	void pyramSort(int *, int);
 
+	void xORSort(int *data, int first, int last);
 
 	void setTStart();
 
@@ -27,6 +26,11 @@ private:
 	double calcTimeDiffInMs() {
 		return std::chrono::duration<double, std::milli>(t_end - t_start).count();
 	}
+
+private:
+	std::chrono::time_point<std::chrono::high_resolution_clock> t_start;
+	std::chrono::time_point<std::chrono::high_resolution_clock> t_end;
+
 };
 
 void Lab3_1_Sort::insertionSort(int *arrayPtr, int length) {
@@ -73,6 +77,80 @@ void Lab3_1_Sort::binInsertionSort(int *data, int size) {
 	setTEnd();
 	calcTimeDiffInMs();
 	std::cout << "Сортировка заняла " << calcTimeDiffInMs() << " мс" << std::endl;
+}
+
+
+// Функция "просеивания" через кучу - формирование кучи
+void siftDown(int *numbers, int root, int bottom) {
+	int maxChild; // индекс максимального потомка
+	int done = 0; // флаг того, что куча сформирована
+	// Пока не дошли до последнего ряда
+	while ((root * 2 <= bottom) && (!done)) {
+		if (root * 2 == bottom)    // если мы в последнем ряду,
+			maxChild = root * 2;    // запоминаем левый потомок
+			// иначе запоминаем больший потомок из двух
+		else if (numbers[root * 2] > numbers[root * 2 + 1])
+			maxChild = root * 2;
+		else
+			maxChild = root * 2 + 1;
+		// если элемент вершины меньше максимального потомка
+		if (numbers[root] < numbers[maxChild]) {
+			int temp = numbers[root]; // меняем их местами
+			numbers[root] = numbers[maxChild];
+			numbers[maxChild] = temp;
+			root = maxChild;
+		} else // иначе
+			done = 1; // пирамида сформирована
+	}
+}
+
+void Lab3_1_Sort::pyramSort(int *data, int size) {
+// Функция сортировки на куче
+	setTStart();
+	// Формируем нижний ряд пирамиды
+	for (int i = (size / 2) - 1; i >= 0; i--)
+		siftDown(data, i, size - 1);
+	// Просеиваем через пирамиду остальные элементы
+	for (int i = size - 1; i >= 1; i--) {
+		int temp = data[0];
+		data[0] = data[i];
+		data[i] = temp;
+		siftDown(data, 0, i - 1);
+	}
+	setTEnd();
+	calcTimeDiffInMs();
+	std::cout << "Сортировка заняла " << calcTimeDiffInMs() << " мс" << std::endl;
+}
+
+void Lab3_1_Sort::xORSort(int *data, int first, int last) {
+
+	int i = first, j = last;
+	int tmp, x = data[(first + last) / 2];
+
+	do {
+		while (data[i] < x)
+			i++;
+		while (data[j] > x)
+			j--;
+
+		if (i <= j) {
+			if (i < j) {
+				tmp = data[i];
+				data[i] = data[j];
+				data[j] = tmp;
+			}
+			i++;
+			j--;
+		}
+	} while (i <= j);
+
+	if (i < last)
+		xORSort(data, i, last);
+	if (first < j)
+		xORSort(data, first, j);
+
+
+
 }
 
 void Lab3_1_Sort::setTStart() {
