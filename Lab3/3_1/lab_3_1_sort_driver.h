@@ -25,6 +25,7 @@ void Lab_3_1_Sort_Driver::Sort(int *arr, int size, char type) {
 
 	if (type == 'i') {
 		sort.insertionSort(tmp,size+1);
+
 	}
 	else if (type == 'b') {
 		sort.binInsertionSort(tmp,size);

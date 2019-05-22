@@ -12,6 +12,7 @@
 class Lab3_1_Sort {
 public:
 	void insertionSort(int *, int);
+
 	void binInsertionSort(int *, int);
 
 private:
@@ -23,8 +24,8 @@ private:
 
 	void setTEnd();
 
-	double calcTimeDiffInMs(){
-		return std::chrono::duration<double, std::milli>(t_end-t_start).count();
+	double calcTimeDiffInMs() {
+		return std::chrono::duration<double, std::milli>(t_end - t_start).count();
 	}
 };
 
@@ -44,50 +45,34 @@ void Lab3_1_Sort::insertionSort(int *arrayPtr, int length) {
 		}
 	}
 	setTEnd();
-	std::cout<<"Сортировка заняла "<<calcTimeDiffInMs()<<" мс"<<std::endl;
-	if(calcTimeDiffInMs()<1)
-		throw std::runtime_error("Кто-то не отчистил память?");
+	std::cout << "Сортировка заняла " << calcTimeDiffInMs() << " мс" << std::endl;
 	//return ;
 
 }
-void Lab3_1_Sort::binInsertionSort (int* data, int size){
+
+void Lab3_1_Sort::binInsertionSort(int *data, int size) {
 	setTStart();
-	int i;
-	for (i = 0; i < size; i++) {
-		int pos = -1;
-		int start = 0;
-		int end = i - 1;
-		int numToInsert = data[i];
-		// Находим место вставки с помощью бинарного поиска
-		while (start <= end && pos == -1) {
-			int middle = (start + end) / 2;
-			if (numToInsert > data[middle]) {
-				start = middle + 1;
-			} else if (numToInsert < data[middle]) {
-				end = middle - 1;
-			} else {
-				pos = middle;
-			}
+	int x;
+	int left;
+	int right;
+	int sred;
+	for (int i = 1; i < size; i++)
+		if (data[i - 1] > data[i]) {
+			x = data[i];
+			left = 0;
+			right = i - 1;
+			do {
+				sred = (left + right) / 2;
+				if (data[sred] < x) left = sred + 1;
+				else right = sred - 1;
+			} while (left <= right);
+			for (int j = i - 1; j >= left; j--)
+				data[j + 1] = data[j];
+			data[left] = x;
 		}
-		if(end < 0){
-			// определяем позицию в случае если элемент меньше всех отсортированных
-			pos = 0;
-		} else if(start >= i){
-			// определяем позицию в случае если элемент больше всех отсортированных
-			pos = i;
-		}
-		if (pos < i) {
-			// сдвигаем элементы вправо на одну позицию
-			int j;
-			for (j = i; j > pos; j--) {
-				data[j] = data[j - 1];
-			}
-			data[pos] = numToInsert;
-		}
-	}
 	setTEnd();
 	calcTimeDiffInMs();
-	std::cout<<"Сортировка заняла "<<calcTimeDiffInMs()<<" мс"<<std::endl;
+	std::cout << "Сортировка заняла " << calcTimeDiffInMs() << " мс" << std::endl;
 }
 
 void Lab3_1_Sort::setTStart() {
