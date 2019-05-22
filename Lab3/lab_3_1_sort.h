@@ -84,6 +84,7 @@ void Lab3_1_Sort::binInsertionSort (int* data, int size){
 	}
 	setTEnd();
 	calcTimeDiffInMs();
+	std::cout<<"Сортировка заняла "<<calcTimeDiffInMs()<<" мс"<<std::endl;
 }
 
 void Lab3_1_Sort::setTStart() {

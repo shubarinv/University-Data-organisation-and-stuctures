@@ -43,7 +43,6 @@ int main(){
 		arr[i]=tmp;
 		i++;
 	}
-	infile.close();
 
 	sort.insertionSort(arr,15001);
 
@@ -52,7 +51,6 @@ int main(){
 	//For N2
 
 	cout<<"\n____________\nN2 40000 элементов"<<endl;
-	infile.open("unsorted.txt");
 
 	arr=new int[40000];
 	i=0;
@@ -80,12 +78,10 @@ int main(){
 
 	sort.insertionSort(arr,40001);
 
-	delete(arr);
 
 	//For N3
 
 	cout<<"\n____________\nN3 80000 элементов"<<endl;
-	infile.open("unsorted.txt");
 
 	arr=new int[80000];
 	i=0;
@@ -109,7 +105,6 @@ int main(){
 		i++;
 	}
 
-	infile.close();
 
 	sort.insertionSort(arr,80001);
 
@@ -118,7 +113,7 @@ int main(){
 	//For N4
 
 	cout<<"\n____________\nN4 150000 элементов"<<endl;
-	infile.open("unsorted.txt");
+
 
 	arr=new int[150000];
 	i=0;
@@ -142,14 +137,12 @@ int main(){
 		i++;
 	}
 
-	infile.close();
 
 	sort.insertionSort(arr,150001);
 
 	delete(arr);
 
 
-/* THE FOLLOWING CODE WILL CAUSE EXCEPTION DO NOT USE IT
 	cout<<"\n=============\nСортировка бинарными вставками\n=============\n";
 	//For N1
 	arr=new int[15000];
@@ -182,7 +175,6 @@ int main(){
 	//For N2
 
 	cout<<"\n____________\nN2 40000 элементов"<<endl;
-	infile.open("unsorted.txt");
 
 	arr=new int[40000];
 	i=0;
@@ -206,7 +198,6 @@ int main(){
 		i++;
 	}
 
-	infile.close();
 
 	sort.binInsertionSort(arr,40000);
 
@@ -215,7 +206,6 @@ int main(){
 	//For N3
 
 	cout<<"\n____________\nN3 80000 элементов"<<endl;
-	infile.open("unsorted.txt");
 
 	arr=new int[80000];
 	i=0;
@@ -239,7 +229,6 @@ int main(){
 		i++;
 	}
 
-	infile.close();
 
 	sort.binInsertionSort(arr,80000);
 
@@ -247,7 +236,6 @@ int main(){
 	//For N4
 
 	cout<<"\n____________\nN4 150000 элементов"<<endl;
-	infile.open("unsorted.txt");
 
 	arr=new int[150000];
 	i=0;
@@ -277,5 +265,4 @@ int main(){
 
 
 	return 0;
- */
 }

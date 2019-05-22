@@ -169,7 +169,6 @@ int main() {
 		clearBuff();
 		railroads[i][1] = railroads[1][i];
 	}
-
 	int mix[V][V];
 	for (int i = 0; i < V; ++i) {
 		for (int j = 0; j < V; ++j) {
