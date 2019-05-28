@@ -8,11 +8,13 @@
 
 #include "lab_3_1_sort.h"
 
+using namespace std;
+
 class Lab_3_1_Sort_Driver {
 public:
 	void Sort(int *arr, int size, char);
 private:
-	int * tmp= nullptr;
+	int * tmp= nullptr,*tmpRev= nullptr;
 	Lab3_1_Sort sort;
 	static bool validateSort(const int *,int);
 
@@ -20,33 +22,78 @@ private:
 
 void Lab_3_1_Sort_Driver::Sort(int *arr, int size, char type) {
 	tmp=new int[size];
+	tmpRev=new int[size];
 
 	for (int i = 0; i <=size ; ++i) {
 		tmp[i]=arr[i];
 	}
-
 	if (type == 'i') {
+		cout<<"\nSorting unsorted array"<<endl;
 		sort.insertionSort(tmp,size+1);
+		cout<<"Sorting of sorted array"<<endl;
+		sort.insertionSort(tmp,size+1);
+		cout<<"Sorting back sorted array"<<endl;
+		for (int i = size; i ==0 ; i--) {
+			tmpRev[size-i]=arr[i];
+		}
+		sort.insertionSort(tmpRev,size+1);
+		cout<<"\n_________________________\n";
 
 	}
 	else if (type == 'b') {
+		cout<<"\nSorting unsorted array"<<endl;
 		sort.binInsertionSort(tmp,size+1);
+		cout<<"Sorting of sorted array"<<endl;
+		sort.binInsertionSort(tmp,size+1);
+		cout<<"Sorting back sorted array"<<endl;
+		for (int i = size; i ==0 ; i--) {
+			tmpRev[size-i]=arr[i];
+		}
+		sort.binInsertionSort(tmpRev,size+1);
+		cout<<"\n_________________________\n";
 	}
 	else if (type == 'p') {
+		cout<<"\nSorting unsorted array"<<endl;
 		sort.pyramSort(tmp,size);
+		cout<<"Sorting of sorted array"<<endl;
+		sort.pyramSort(tmp,size);
+		cout<<"Sorting back sorted array"<<endl;
+		for (int i = size; i ==0 ; i--) {
+			tmpRev[size-i]=arr[i];
+		}
+		sort.pyramSort(tmpRev,size);
+		cout<<"\n_________________________\n";
 	}
 	else if (type == 'q') {
+		cout<<"\nSorting unsorted array"<<endl;
 		sort.setTStart();
 		sort.xORSort(tmp,0,size-1);
 		sort.setTEnd();
-		sort.calcTimeDiffInMs();
 		std::cout << "Сортировка заняла " << sort.calcTimeDiffInMs() << " мс" << std::endl;
+
+		cout<<"Sorting of sorted array"<<endl;
+		sort.setTStart();
+		sort.xORSort(tmp,0,size-1);
+		sort.setTEnd();
+		std::cout << "Сортировка заняла " << sort.calcTimeDiffInMs() << " мс" << std::endl;
+
+
+		cout<<"Sorting back sorted array"<<endl;
+		for (int i = size; i ==0 ; i--) {
+			tmpRev[size-i]=arr[i];
+		}
+		sort.setTStart();
+		sort.xORSort(tmpRev,0,size-1);
+		sort.setTEnd();
+		std::cout << "Сортировка заняла " << sort.calcTimeDiffInMs() << " мс" << std::endl;
+		cout<<"\n_________________________\n";
 	}
 
 
 	if(!validateSort(tmp,size))
 		throw std::runtime_error("FK INCORRECT SORT");
 	delete [] tmp;
+	delete [] tmpRev;
 }
 
 bool Lab_3_1_Sort_Driver::validateSort(const int *tmpV,int size) {
