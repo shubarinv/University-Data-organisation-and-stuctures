@@ -69,13 +69,13 @@ void Lab_3_1_Sort_Driver::Sort(int *arr, int size, char type) {
 		sort.setTStart();
 		sort.xORSort(tmp,0,size-1);
 		sort.setTEnd();
-		std::cout << "Сортировка заняла " << sort.calcTimeDiffInMs() << " мс" << std::endl;
+		std::cout << "Сортировка заняла " << sort.calcTimeDiffInMs() << " мс\n"<< "Кол-во сравнений: " <<sort.getCompr()<<"\n";
 
 		cout<<"Sorting of sorted array"<<endl;
 		sort.setTStart();
 		sort.xORSort(tmp,0,size-1);
 		sort.setTEnd();
-		std::cout << "Сортировка заняла " << sort.calcTimeDiffInMs() << " мс" << std::endl;
+		std::cout << "Сортировка заняла " << sort.calcTimeDiffInMs() << " мс\n" << "Кол-во сравнений: " <<sort.getCompr()<<"\n";
 
 
 		cout<<"Sorting back sorted array"<<endl;
@@ -85,7 +85,7 @@ void Lab_3_1_Sort_Driver::Sort(int *arr, int size, char type) {
 		sort.setTStart();
 		sort.xORSort(tmpRev,0,size-1);
 		sort.setTEnd();
-		std::cout << "Сортировка заняла " << sort.calcTimeDiffInMs() << " мс" << std::endl;
+		std::cout << "Сортировка заняла " << sort.calcTimeDiffInMs() << " мс\n" << "Кол-во сравнений: " <<sort.getCompr()<<"\n";
 		cout<<"\n_________________________\n";
 	}
 

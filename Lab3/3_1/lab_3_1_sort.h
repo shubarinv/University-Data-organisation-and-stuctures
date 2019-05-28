@@ -31,9 +31,17 @@ private:
 	std::chrono::time_point<std::chrono::high_resolution_clock> t_start;
 	std::chrono::time_point<std::chrono::high_resolution_clock> t_end;
 
+	unsigned int compr = 0;
+public:
+	unsigned int getCompr() const;
+
+private:
+
+	void siftDown(int *numbers, int root, int bottom);
 };
 
 void Lab3_1_Sort::insertionSort(int *arrayPtr, int length) {
+	compr = 0;
 	setTStart();
 	int temp, // временная переменная для хранения значения элемента сортируемого массива
 			item; // индекс предыдущего элемента
@@ -43,29 +51,35 @@ void Lab3_1_Sort::insertionSort(int *arrayPtr, int length) {
 		while (item >= 0 &&
 		       arrayPtr[item] > temp) // пока индекс не равен 0 и предыдущий элемент массива больше текущего
 		{
+			compr++;
 			arrayPtr[item + 1] = arrayPtr[item]; // перестановка элементов массива
 			arrayPtr[item] = temp;
 			item--;
 		}
 	}
 	setTEnd();
-	std::cout << "Сортировка заняла " << calcTimeDiffInMs() << " мс" << std::endl;
+	std::cout << "Сортировка заняла " << calcTimeDiffInMs() << " мс" << std::endl << "Кол-во сравнений: " << compr<<"\n"
+	          << std::endl;
 	//return ;
 
 }
 
 void Lab3_1_Sort::binInsertionSort(int *data, int size) {
+	compr = 0;
 	setTStart();
 	int x;
 	int left;
 	int right;
 	int sred;
-	for (int i = 1; i < size; i++)
+	for (int i = 1; i < size; i++) {
+		compr++;
+
 		if (data[i - 1] > data[i]) {
 			x = data[i];
 			left = 0;
 			right = i - 1;
 			do {
+				compr++;
 				sred = (left + right) / 2;
 				if (data[sred] < x) left = sred + 1;
 				else right = sred - 1;
@@ -74,18 +88,21 @@ void Lab3_1_Sort::binInsertionSort(int *data, int size) {
 				data[j + 1] = data[j];
 			data[left] = x;
 		}
+	}
 	setTEnd();
 	calcTimeDiffInMs();
-	std::cout << "Сортировка заняла " << calcTimeDiffInMs() << " мс" << std::endl;
+	std::cout << "Сортировка заняла " << calcTimeDiffInMs() << " мс" << std::endl << "Кол-во сравнений: " << compr<<"\n"
+	          << std::endl;
 }
 
 
 // Функция "просеивания" через кучу - формирование кучи
-void siftDown(int *numbers, int root, int bottom) {
+void Lab3_1_Sort::siftDown(int *numbers, int root, int bottom) {
 	int maxChild; // индекс максимального потомка
 	int done = 0; // флаг того, что куча сформирована
 	// Пока не дошли до последнего ряда
 	while ((root * 2 <= bottom) && (!done)) {
+		compr++;
 		if (root * 2 == bottom)    // если мы в последнем ряду,
 			maxChild = root * 2;    // запоминаем левый потомок
 			// иначе запоминаем больший потомок из двух
@@ -94,6 +111,7 @@ void siftDown(int *numbers, int root, int bottom) {
 		else
 			maxChild = root * 2 + 1;
 		// если элемент вершины меньше максимального потомка
+		compr++;
 		if (numbers[root] < numbers[maxChild]) {
 			int temp = numbers[root]; // меняем их местами
 			numbers[root] = numbers[maxChild];
@@ -105,6 +123,7 @@ void siftDown(int *numbers, int root, int bottom) {
 }
 
 void Lab3_1_Sort::pyramSort(int *data, int size) {
+	compr = 0;
 // Функция сортировки на куче
 	setTStart();
 	// Формируем нижний ряд пирамиды
@@ -119,11 +138,12 @@ void Lab3_1_Sort::pyramSort(int *data, int size) {
 	}
 	setTEnd();
 	calcTimeDiffInMs();
-	std::cout << "Сортировка заняла " << calcTimeDiffInMs() << " мс" << std::endl;
+	std::cout << "Сортировка заняла " << calcTimeDiffInMs() << " мс" << std::endl << "Кол-во сравнений: " << compr<<"\n"
+	          << std::endl;
 }
 
 void Lab3_1_Sort::xORSort(int *data, int first, int last) {
-
+	compr = 0;
 	int i = first, j = last;
 	int tmp, x = data[(first + last) / 2];
 
@@ -132,9 +152,11 @@ void Lab3_1_Sort::xORSort(int *data, int first, int last) {
 			i++;
 		while (data[j] > x)
 			j--;
-
+		compr++;
 		if (i <= j) {
+			compr++;
 			if (i < j) {
+
 				tmp = data[i];
 				data[i] = data[j];
 				data[j] = tmp;
@@ -144,12 +166,14 @@ void Lab3_1_Sort::xORSort(int *data, int first, int last) {
 		}
 	} while (i <= j);
 
-	if (i < last)
+	if (i < last) {
+		compr++;
 		xORSort(data, i, last);
-	if (first < j)
+	}
+	if (first < j) {
+		compr++;
 		xORSort(data, first, j);
-
-
+	}
 
 }
 
@@ -159,6 +183,10 @@ void Lab3_1_Sort::setTStart() {
 
 void Lab3_1_Sort::setTEnd() {
 	t_end = std::chrono::high_resolution_clock::now();
+}
+
+unsigned int Lab3_1_Sort::getCompr() const {
+	return compr;
 }
 
 
