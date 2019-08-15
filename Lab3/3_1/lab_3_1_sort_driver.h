@@ -12,7 +12,7 @@ using namespace std;
 
 class Lab_3_1_Sort_Driver {
 public:
-	void Sort(int *arr, int size, char);
+	void Sort(int *arr,int *, int size, char);
 private:
 	int * tmp= nullptr,*tmpRev= nullptr;
 	Lab3_1_Sort sort;
@@ -20,12 +20,15 @@ private:
 
 };
 
-void Lab_3_1_Sort_Driver::Sort(int *arr, int size, char type) {
+void Lab_3_1_Sort_Driver::Sort(int *arrUnsort,int *arrBkSort, int size, char type) {
 	tmp=new int[size];
 	tmpRev=new int[size];
 
 	for (int i = 0; i <=size ; ++i) {
-		tmp[i]=arr[i];
+		tmp[i]=arrUnsort[i];
+	}
+	for (int i = 0; i <=size ; ++i) {
+		tmpRev[i]=arrBkSort[i];
 	}
 	if (type == 'i') {
 		cout<<"\nSorting unsorted array"<<endl;
@@ -33,9 +36,6 @@ void Lab_3_1_Sort_Driver::Sort(int *arr, int size, char type) {
 		cout<<"Sorting of sorted array"<<endl;
 		sort.insertionSort(tmp,size+1);
 		cout<<"Sorting back sorted array"<<endl;
-		for (int i = size; i ==0 ; i--) {
-			tmpRev[size-i]=arr[i];
-		}
 		sort.insertionSort(tmpRev,size+1);
 		cout<<"\n_________________________\n";
 
@@ -46,9 +46,6 @@ void Lab_3_1_Sort_Driver::Sort(int *arr, int size, char type) {
 		cout<<"Sorting of sorted array"<<endl;
 		sort.binInsertionSort(tmp,size+1);
 		cout<<"Sorting back sorted array"<<endl;
-		for (int i = size; i ==0 ; i--) {
-			tmpRev[size-i]=arr[i];
-		}
 		sort.binInsertionSort(tmpRev,size+1);
 		cout<<"\n_________________________\n";
 	}
@@ -58,9 +55,6 @@ void Lab_3_1_Sort_Driver::Sort(int *arr, int size, char type) {
 		cout<<"Sorting of sorted array"<<endl;
 		sort.pyramSort(tmp,size);
 		cout<<"Sorting back sorted array"<<endl;
-		for (int i = size; i ==0 ; i--) {
-			tmpRev[size-i]=arr[i];
-		}
 		sort.pyramSort(tmpRev,size);
 		cout<<"\n_________________________\n";
 	}
@@ -79,9 +73,6 @@ void Lab_3_1_Sort_Driver::Sort(int *arr, int size, char type) {
 
 
 		cout<<"Sorting back sorted array"<<endl;
-		for (int i = size; i ==0 ; i--) {
-			tmpRev[size-i]=arr[i];
-		}
 		sort.setTStart();
 		sort.xORSort(tmpRev,0,size-1);
 		sort.setTEnd();
